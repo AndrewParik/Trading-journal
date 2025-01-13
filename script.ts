@@ -1,0 +1,1 @@
+let msg:string = "zum dem čuráks"

@@ -9,7 +9,6 @@ const handleLogin = () => {
   // Mock přihlášení - zde byste mohli volat API
   if (username.value === 'admin' && password.value === 'password') {
     alert('Přihlášení úspěšné!');
-    // Přesměrování nebo jiná logika
   } else {
     errorMessage.value = 'Nesprávné uživatelské jméno nebo heslo.';
   }

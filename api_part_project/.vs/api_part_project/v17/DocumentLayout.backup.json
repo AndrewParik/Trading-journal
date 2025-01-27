@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\trade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:trade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\controllers\\traderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:controllers\\traderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\trader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:trader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\controllers\\traderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:controllers\\traderscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\trade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:trade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -30,11 +30,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Trade.cs",
               "DocumentMoniker": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\Trade.cs",
               "RelativeDocumentMoniker": "Trade.cs",
@@ -47,7 +47,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Trader.cs",
               "DocumentMoniker": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\Trader.cs",
               "RelativeDocumentMoniker": "Trader.cs",
@@ -60,7 +60,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "TradersController.cs",
               "DocumentMoniker": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\Controllers\\TradersController.cs",
               "RelativeDocumentMoniker": "Controllers\\TradersController.cs",
@@ -81,12 +81,11 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAACAAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T08:12:50.566Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-22T08:12:50.566Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\AppDbContext.cs",
               "RelativeDocumentMoniker": "AppDbContext.cs",

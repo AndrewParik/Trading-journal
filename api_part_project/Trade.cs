@@ -7,7 +7,7 @@ namespace api_part_project
     public class Trade
     {
         [Key]
-        [Column("ID")]
+        [Column("Id")]
         public int Id { get; set; }
         [Column("CoinType")]
         public string CoinType { get; set; }
@@ -15,7 +15,9 @@ namespace api_part_project
         public int Worth { get; set; }
         [Column("DateCreated")]
         public DateTime DateCreated { get; set; }
-
+        [ForeignKey("Id")]
+        public int IdTrader { get; set; }
+        
         public Trade(int id, string coinType, int worth, DateTime dateCreated)
         {
             Id = id;

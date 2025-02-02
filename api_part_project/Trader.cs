@@ -7,22 +7,19 @@ namespace api_part_project
     public class Trader
     {
         [Key]
-        [Column("ID")]
+        [Column("Id")]
         public int Id { get; set; }
         [Column("FirstName")]
         public string FirstName { get; set; }
-        [Column("LastNam")]
+        [Column("LastName")]
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
-        [Column("Trades")]
-        public List<Trade> Trades { get; set; }
 
-        public Trader(int id, string firstName, string lastName, List<Trade> trades)
+        public Trader(int id, string firstName, string lastName)
         {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
-            Trades = trades;
         }
     }
 }

@@ -1,4 +1,3 @@
-
 namespace api_part_project
 {
     public class Program
@@ -7,8 +6,6 @@ namespace api_part_project
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            //povoloju komunikaci
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", policy =>
@@ -16,14 +13,23 @@ namespace api_part_project
                     policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
+
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+
+            app.UseExceptionHandler(errorApp =>
+            {
+                errorApp.Run(async context =>
+                {
+                    context.Response.StatusCode = 500;
+                    await context.Response.WriteAsync("Došlo k chybě na serveru.");
+                });
+            });
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -33,8 +39,6 @@ namespace api_part_project
             app.UseCors("AllowAll");
 
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();

@@ -12,5 +12,5 @@ namespace api_part_project
             optionsBuilder.UseMySQL(con);
         }
     }
-}
+} 
 

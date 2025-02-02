@@ -1,0 +1,35 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace api_part_project.Controllers
+{
+    [Route("api/trades")]
+    [ApiController]
+    public class TradeController : ControllerBase
+    {
+        private readonly AppDbContext _context;
+
+        public TradeController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet("user/{idTrader}")]
+        public async Task<IActionResult> GetTradesByUser(int idTrader)
+        {
+            var trades = await _context.Trades
+                .Where(t => t.IdTrader == idTrader)
+                .ToListAsync();
+
+            if (!trades.Any())
+            {
+                return NotFound(new { message = "Žádné obchody pro tohoto uživatele." });
+            }
+
+            return Ok(trades);
+        }
+    }
+}

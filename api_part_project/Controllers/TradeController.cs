@@ -14,14 +14,12 @@ namespace api_part_project.Controllers
         }
 
 
-        // 🔹 Získání všech obchodů
         [HttpGet]
         public IActionResult GetAllTrades()
         {
             return Ok(_context.Trades);
         }
 
-        // 🔹 Získání detailu obchodu podle ID
         [HttpGet("{id}")]
         public IActionResult GetTradeById(int id)
         {
@@ -34,3 +32,4 @@ namespace api_part_project.Controllers
         }
     }
 }
+

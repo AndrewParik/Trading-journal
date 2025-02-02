@@ -14,6 +14,7 @@ namespace api_part_project
         [Column("LastName")]
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
+        public List<Trade> Trades { get; set; }
 
         public Trader(int id, string firstName, string lastName)
         {

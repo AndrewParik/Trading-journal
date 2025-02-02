@@ -1,8 +1,8 @@
 [
   {
-    "ContainingType": "api_part_project.Controllers.TradersController",
-    "Method": "GetAllTraders",
-    "RelativePath": "traders",
+    "ContainingType": "api_part_project.Controllers.TradeController",
+    "Method": "GetAllTrades",
+    "RelativePath": "api/trades",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -10,24 +10,19 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "api_part_project.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
+    "ContainingType": "api_part_project.Controllers.TradeController",
+    "Method": "GetTradeById",
+    "RelativePath": "api/trades/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
+    "Parameters": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[api_part_project.WeatherForecast, api_part_project, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
       }
     ],
-    "EndpointName": "GetWeatherForecast"
+    "ReturnTypes": []
   }
 ]

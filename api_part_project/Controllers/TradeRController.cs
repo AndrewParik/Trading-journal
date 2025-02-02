@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api_part_project.Controllers
 {
@@ -15,6 +16,7 @@ namespace api_part_project.Controllers
         [HttpGet]
         public IActionResult GetAllTraders()
         {
+            _context.Traders.ForEachAsync( t => t.Trades = _context.Trades.Where(te => te.IdTrader == t.Id).ToList());
             return Ok(_context.Traders);
         }
 

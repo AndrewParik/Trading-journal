@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\tom\\onedrive\\plocha\\trading-journal\\api_part_project\\controllers\\tradercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:controllers\\tradercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TradeRController.cs",
+              "DocumentMoniker": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\Controllers\\TradeRController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TradeRController.cs",
+              "ToolTip": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\Controllers\\TradeRController.cs",
+              "RelativeToolTip": "Controllers\\TradeRController.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAAABIAAAB0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-02T17:37:55.54Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

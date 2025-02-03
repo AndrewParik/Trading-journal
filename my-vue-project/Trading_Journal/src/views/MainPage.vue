@@ -46,7 +46,7 @@ const handleLogin = () => {
   left: 0;
   width: 100%;
   height: 100vh;
-  background: url('/my-vue-project/Trading_Journal/public/mracek.jpg') no-repeat center center/cover;
+  background-image: url('/my-vue-project/Trading_Journal/public/mracek.jpg') no-repeat center center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,8 +58,6 @@ const handleLogin = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
 }
 
 .login-box {
@@ -98,7 +96,7 @@ label {
 }
 
 input {
-  width: 100%;
+  width: 92.7%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -108,8 +106,6 @@ input {
 
 input:focus {
   border-color: #4facfe;
-  box-shadow: 0px 0px 8px rgba(79, 172, 254, 0.5);
-  outline: none;
 }
 
 button {

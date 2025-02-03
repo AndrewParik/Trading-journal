@@ -7,8 +7,8 @@ import MainPage from '../views/MainPage.vue'
 const routes = [
   { path: '/', component: MainPage },
   { path: '/lobby', component: Lobby },
-  { path: '/profile', component: Profile },
-  { path: '/trade/:id', component: TradeDetail, props: true }
+  { path: '/profile/:id', component: Profile },
+  { path: '/trades/:id', component: TradeDetail, props: true }
 ]
 
 const router = createRouter({

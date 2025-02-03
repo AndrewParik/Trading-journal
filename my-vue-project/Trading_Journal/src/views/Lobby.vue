@@ -3,55 +3,57 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/axiosInstance'
 
-const routers = useRouter()
+const router = useRouter()
 const userId = localStorage.getItem('userId')
 
-const user = ref<{
+interface User {
   id: number
   firstName: string
   lastName: string
-  email: string
   avatar: string
   portfolioValue: number
-} | null>(null)
+  trades: Trade[]
+}
 
-const trades = ref<Array<{
+interface Trade {
   id: number
   coinType: string
   worth: number
   dateCreated: string
   idTrader: number
-}>>([])
+}
 
-const errorMessage = ref('')
+const user = ref<User | null>(null)
+const trades = ref<Trade[]>([])
+const errorMessage = ref<string>('')
 
 const fetchUserData = async () => {
   if (!userId) {
-    errorMessage.value = 'Uživatel není přihlášen.'
+    errorMessage.value = '❌ Uživatel není přihlášen.'
     return
   }
   try {
-    const response = await api.get(`/users/${userId}`)
+    const response = await api.get(`/api/trader/${userId}`)
     user.value = response.data
-  } catch {
-    errorMessage.value = 'Nepodařilo se načíst uživatelská data.'
+    trades.value = response.data.trades 
+  } catch (error) {
+    console.error('Chyba při načítání uživatele:', error)
+    errorMessage.value = '❌ Nepodařilo se načíst uživatelská data.'
   }
 }
 
-const fetchTrades = async () => {
-  if (!userId) return
-  try {
-    const response = await api.get(`/trades/user/${userId}`)
-    trades.value = response.data
-  } catch {
-    errorMessage.value = 'Nepodařilo se načíst obchody z API.'
-  }
-}
+// const fetchTrades = async () => {
+//   if (!userId) return
+//   try {
+//     const response = await api.get(`/api/trader/${userId}`)
+//     trades.value = response.data.trades
+//   } catch (error) {
+//     console.error('Chyba při načítání obchodů:', error)
+//     errorMessage.value = '❌ Nepodařilo se načíst obchody z API.'
+//   }
+// }
 
-onMounted(async () => {
-  await fetchUserData()
-  await fetchTrades()
-})
+onMounted(fetchUserData)
 </script>
 
 <template>
@@ -61,8 +63,8 @@ onMounted(async () => {
     <div class="lobby">
       <nav class="navbar">
         <router-link to="/lobby">🏠 Lobby</router-link>
-        <router-link to="/profile">👤 Profil</router-link>
-        <router-link to="/trades">📈 Obchody</router-link>
+        <router-link to="/profil/">👤 Profil</router-link>
+        <router-link to="/trades/">📈 Obchody</router-link>
         <router-link to="/">🚪 Odhlásit</router-link>
       </nav>
 
@@ -78,7 +80,6 @@ onMounted(async () => {
           <img :src="user.avatar || 'https://via.placeholder.com/150'" alt="Profilový obrázek" class="avatar" />
           <div class="details">
             <p><strong>👤 Jméno:</strong> {{ user.firstName }} {{ user.lastName }}</p>
-            <p><strong>📧 Email:</strong> {{ user.email }}</p>
           </div>
         </div>
       </div>
@@ -92,7 +93,6 @@ onMounted(async () => {
               <th>Coin</th>
               <th>Hodnota</th>
               <th>Datum</th>
-              <th>Akce</th>
             </tr>
           </thead>
           <tbody>
@@ -121,7 +121,6 @@ onMounted(async () => {
   left: 0;
   width: 100%;
   height: 100vh;
-  background: url('https://source.unsplash.com/1600x900/?business,finance,technology') no-repeat center center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -132,19 +131,19 @@ onMounted(async () => {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
 }
 
 .lobby {
   position: relative;
-  background: rgba(255, 255, 255, 0.95);
+  background: gray;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
   width: 80%;
+  color: white;
   max-width: 800px;
   animation: fadeIn 0.6s ease-in-out;
 }
@@ -174,7 +173,7 @@ onMounted(async () => {
 .portfolio {
   font-size: 22px;
   font-weight: bold;
-  background: #f4f4f4;
+  background: white;
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -182,15 +181,14 @@ onMounted(async () => {
 
 h2 {
   font-size: 36px;
-  color: #27ae60;
+  color: white;
 }
 
-/* Informace o uživateli */
 .user-info {
   display: flex;
   align-items: center;
   gap: 20px;
-  background: #f9f9f9;
+  background: black;
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -219,12 +217,14 @@ table {
 
 th, td {
   border: 1px solid #ddd;
+  color: white;
+  background-color: lightblue;
   padding: 12px;
   text-align: center;
 }
 
 th {
-  background: #f4f4f4;
+  background: black;
 }
 
 .detail-button {

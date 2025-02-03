@@ -22,27 +22,22 @@ const trades = ref<Array<{
 const errorMessage = ref('')
 
 const fetchUserData = async () => {
-  try {
-    const response = await api.get('/user/1')
-    user.value = response.data
-  } catch {
-    errorMessage.value = 'Nepodařilo se načíst uživatelská data.'
+  if (!userId) {
+    errorMessage.value = '❌ Uživatel není přihlášen.'
+    return
   }
-}
-
-const fetchTrades = async () => {
-  if (!user.value) return
   try {
-    const response = await api.get(`/trades/${user.value.id}`)
-    trades.value = response.data
-  } catch {
-    errorMessage.value = 'Nepodařilo se načíst obchody z API.'
+    const response = await api.get(`/api/trader/${userId}`)
+    user.value = response.data
+    trades.value = response.data.trades 
+  } catch (error) {
+    console.error('Chyba při načítání uživatele:', error)
+    errorMessage.value = '❌ Nepodařilo se načíst uživatelská data.'
   }
 }
 
 onMounted(async () => {
   await fetchUserData()
-  await fetchTrades()
 })
 </script>
 

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using api_part_project.Class;
+using Microsoft.AspNetCore.Http.Metadata;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.EntityFrameworkCore;
 
 namespace api_part_project.Controllers
@@ -14,21 +17,25 @@ namespace api_part_project.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllTraders()
+        public async Task<IActionResult> GetAllTraders()
         {
-            _context.Traders.ForEachAsync( t => t.Trades = _context.Trades.Where(te => te.IdTrader == t.Id).ToList());
+            var traders = await _context.Traders.ToListAsync();
+            foreach (Trader t in traders)
+            {
+                t.Trades = await _context.Trades.Where(te => te.IdTrader ==  t.Id).ToListAsync();
+            }
             return Ok(_context.Traders);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetTraderById(int id)
+        public async Task<IActionResult> GetTraderById(int id)
         {
-            var trader = _context.Traders.FirstOrDefault(t => t.Id == id);
+            var trader = await _context.Traders.FirstOrDefaultAsync(t => t.Id == id);
             if ( trader == null)
             {
                 return NotFound(new { message = "Obchodník nenalezen." });
             }
-            trader.Trades = _context.Trades.Where(t => t.IdTrader == id).ToList();
+            trader.Trades = await _context.Trades.Where(t => t.IdTrader == id).ToListAsync();
             return Ok(trader);
         }
     }

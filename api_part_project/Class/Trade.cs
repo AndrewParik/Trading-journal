@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace api_part_project
+namespace api_part_project.Class
 {
     [Table("tbTrades")]
     public class Trade
@@ -17,7 +17,7 @@ namespace api_part_project
         public DateTime DateCreated { get; set; }
         [ForeignKey("Id")]
         public int IdTrader { get; set; }
-        
+
         public Trade(int id, string coinType, int worth, DateTime dateCreated)
         {
             Id = id;

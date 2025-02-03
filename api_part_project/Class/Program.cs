@@ -1,4 +1,4 @@
-namespace api_part_project
+namespace api_part_project.Class
 {
     public class Program
     {

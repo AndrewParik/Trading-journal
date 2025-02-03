@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using api_part_project.Class;
+using Microsoft.AspNetCore.Mvc;
 
 namespace api_part_project.Controllers
 {

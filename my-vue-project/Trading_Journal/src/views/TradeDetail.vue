@@ -33,7 +33,7 @@ const deleteTrade = async () => {
   if (!confirm('⚠️ Opravdu chcete odstranit tento obchod?')) return
 
   try {
-    await api.delete(`/trades/${trade.value.id}`)
+    await api.delete(`api/trades/${trade.value.id}`)
     alert('✅ Obchod úspěšně odstraněn!')
     router.push('/trades')
   } catch (error) {

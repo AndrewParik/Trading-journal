@@ -31,5 +31,19 @@ namespace api_part_project.Controllers
             trader.Trades = _context.Trades.Where(t => t.IdTrader == id).ToList();
             return Ok(trader);
         }
+
+        [HttpGet("login/{us}+{ps}")]
+        public IActionResult GetUserLogIn(string us, string ps)
+        {
+            var tr = _context.Traders.FirstOrDefault(t => t.FullName == us || t.PassWord == ps);
+            if (tr == null)
+            {
+                return NotFound(new { message = "Špatné jméno nebo heslo." });
+            }
+            else
+            {
+                return Ok(tr);
+            }
+        }
     }
 }

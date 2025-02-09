@@ -1,5 +1,4 @@
 ﻿using api_part_project.Class;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
@@ -47,9 +46,8 @@ namespace api_part_project.Controllers
             tr!.Trades = _context.Trades.Where(t => t.IdTrader == tr.Id).ToList();
             if (tr == null)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, new { msg = "Špatné jméno nebo heslo" });
-            }
-            return Ok(tr);
+                return NotFound(new { message = "Špatné jméno nebo heslo" });
+            } else { return Ok(tr); }
         }
     }
 }

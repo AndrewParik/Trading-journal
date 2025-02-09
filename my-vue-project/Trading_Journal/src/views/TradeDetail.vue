@@ -19,7 +19,7 @@ const errorMessage = ref<string>('')
 
 const fetchTrade = async () => {
   try {
-    const response = await api.get(`/trades/${route.params.id}`)
+    const response = await api.get(`api/trades/${route.params.id}`)
     trade.value = response.data
   } catch (error) {
     console.error('Chyba při načítání detailu obchodu:', error)

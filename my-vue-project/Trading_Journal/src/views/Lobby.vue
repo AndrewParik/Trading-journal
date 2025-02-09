@@ -10,7 +10,8 @@ interface User {
   id: number
   firstName: string
   lastName: string
-  avatar: string
+  email?: string
+  avatar?: string
   portfolioValue: number
   trades: Trade[]
 }
@@ -32,26 +33,16 @@ const fetchUserData = async () => {
     errorMessage.value = '❌ Uživatel není přihlášen.'
     return
   }
+
   try {
-    const response = await api.get(`/api/trader/${userId}`)
+    const response = await api.get(`/trader/${userId}`)
     user.value = response.data
-    trades.value = response.data.trades 
+    trades.value = response.data.trades || []
   } catch (error) {
-    console.error('Chyba při načítání uživatele:', error)
+    console.error('Chyba při načítání uživatelských dat:', error)
     errorMessage.value = '❌ Nepodařilo se načíst uživatelská data.'
   }
 }
-
-// const fetchTrades = async () => {
-//   if (!userId) return
-//   try {
-//     const response = await api.get(`/api/trader/${userId}`)
-//     trades.value = response.data.trades
-//   } catch (error) {
-//     console.error('Chyba při načítání obchodů:', error)
-//     errorMessage.value = '❌ Nepodařilo se načíst obchody z API.'
-//   }
-// }
 
 onMounted(fetchUserData)
 </script>
@@ -59,13 +50,12 @@ onMounted(fetchUserData)
 <template>
   <div class="background-container">
     <div class="overlay"></div>
-
     <div class="lobby">
       <nav class="navbar">
         <router-link to="/lobby">🏠 Lobby</router-link>
-        <router-link to="/profil/">👤 Profil</router-link>
-        <router-link to="/trades/">📈 Obchody</router-link>
-        <router-link to="/">🚪 Odhlásit</router-link>
+        <router-link to="/profile">👤 Profil</router-link>
+        <router-link to="/trades">📈 Obchody</router-link>
+        <router-link to="/" @click="userId = null">🚪 Odhlásit</router-link>
       </nav>
 
       <h1>📊 Přehled portfolia</h1>
@@ -80,11 +70,12 @@ onMounted(fetchUserData)
           <img :src="user.avatar || 'https://via.placeholder.com/150'" alt="Profilový obrázek" class="avatar" />
           <div class="details">
             <p><strong>👤 Jméno:</strong> {{ user.firstName }} {{ user.lastName }}</p>
+            <p v-if="user.email"><strong>📧 Email:</strong> {{ user.email }}</p>
           </div>
         </div>
       </div>
 
-      <div class="trades">
+      <div class="trades" v-if="trades.length > 0">
         <h3>📈 Moje obchody</h3>
         <table>
           <thead>
@@ -93,6 +84,7 @@ onMounted(fetchUserData)
               <th>Coin</th>
               <th>Hodnota</th>
               <th>Datum</th>
+              <th>Akce</th>
             </tr>
           </thead>
           <tbody>
@@ -121,6 +113,7 @@ onMounted(fetchUserData)
   left: 0;
   width: 100%;
   height: 100vh;
+  background: url('https://source.unsplash.com/1600x900/?business,finance,technology') no-repeat center center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -131,19 +124,18 @@ onMounted(fetchUserData)
   top: 0;
   left: 0;
   width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
 }
 
 .lobby {
   position: relative;
-  background: gray;
+  background: rgba(255, 255, 255, 0.95);
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
   width: 80%;
-  color: white;
   max-width: 800px;
   animation: fadeIn 0.6s ease-in-out;
 }
@@ -173,7 +165,7 @@ onMounted(fetchUserData)
 .portfolio {
   font-size: 22px;
   font-weight: bold;
-  background: white;
+  background: #f4f4f4;
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -181,14 +173,14 @@ onMounted(fetchUserData)
 
 h2 {
   font-size: 36px;
-  color: white;
+  color: #27ae60;
 }
 
 .user-info {
   display: flex;
   align-items: center;
   gap: 20px;
-  background: black;
+  background: #f9f9f9;
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -217,14 +209,12 @@ table {
 
 th, td {
   border: 1px solid #ddd;
-  color: white;
-  background-color: lightblue;
   padding: 12px;
   text-align: center;
 }
 
 th {
-  background: black;
+  background: #f4f4f4;
 }
 
 .detail-button {

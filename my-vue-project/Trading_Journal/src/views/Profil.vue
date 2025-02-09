@@ -22,12 +22,12 @@ const trades = ref<Array<{
 const errorMessage = ref('')
 
 const fetchUserData = async () => {
-  if (!userId) {
+  if (!user.value?.id) {
     errorMessage.value = '❌ Uživatel není přihlášen.'
     return
   }
   try {
-    const response = await api.get(`/api/trader/${userId}`)
+    const response = await api.get(`/api/trader/${user.value?.id}`)
     user.value = response.data
     trades.value = response.data.trades 
   } catch (error) {

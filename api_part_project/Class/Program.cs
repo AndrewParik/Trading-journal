@@ -42,6 +42,7 @@ namespace api_part_project.Class
             app.MapControllers();
 
             app.Run();
+            
         }
     }
 }

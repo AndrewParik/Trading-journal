@@ -14,15 +14,13 @@ namespace api_part_project.Class
         [Column("LastName")]
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
-        public List<Trade> ?Trades { get; set; }
-        public string PassWord { get; set; }
+        public List<Trade> Trades { get; set; }
 
-        public Trader(int id, string firstName, string lastName, string passWord)
+        public Trader(int id, string firstName, string lastName)
         {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
-            PassWord = passWord;
         }
     }
 }

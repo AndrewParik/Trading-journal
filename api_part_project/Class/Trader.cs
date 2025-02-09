@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace api_part_project
+namespace api_part_project.Class
 {
     [Table("tbTraders")]
     public class Trader

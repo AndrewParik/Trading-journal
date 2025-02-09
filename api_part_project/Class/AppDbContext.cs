@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace api_part_project
+namespace api_part_project.Class
 {
     public class AppDbContext : DbContext
     {
@@ -12,5 +12,5 @@ namespace api_part_project
             optionsBuilder.UseMySQL(con);
         }
     }
-} 
+}
 

@@ -22,68 +22,64 @@ const trades = ref<Array<{
 const errorMessage = ref('')
 
 const fetchUserData = async () => {
-  try {
-    const response = await api.get('/user/1') 
-    user.value = response.data
-  } catch (error) {
-    console.error('Chyba při načítání uživatelských dat:', error)
-    errorMessage.value = 'Nepodařilo se načíst uživatelská data.'
+  if (!userId) {
+    errorMessage.value = '❌ Uživatel není přihlášen.'
+    return
   }
-}
-
-const fetchTrades = async () => {
-  if (!user.value) return
   try {
-    const response = await api.get(`/trades/${user.value.id}`)
-    trades.value = response.data
+    const response = await api.get(`/api/trader/${userId}`)
+    user.value = response.data
+    trades.value = response.data.trades 
   } catch (error) {
-    console.error('Chyba při načítání obchodů:', error)
-    errorMessage.value = 'Nepodařilo se načíst obchody z API.'
+    console.error('Chyba při načítání uživatele:', error)
+    errorMessage.value = '❌ Nepodařilo se načíst uživatelská data.'
   }
 }
 
 onMounted(async () => {
   await fetchUserData()
-  await fetchTrades()
 })
 </script>
 
 <template>
-  <div class="profile">
-    <h1>Můj profil</h1>
-
-    <div v-if="user">
-      <div class="avatar-container">
-        <img :src="user.avatar || 'https://via.placeholder.com/150'" alt="Profilový obrázek" class="avatar" />
-      </div>
-
-      <div class="profile-info">
-        <p><strong>Jméno:</strong> {{ user.firstName }} {{ user.lastName }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>💰 Stav portfolia:</strong> {{ user.portfolioValue.toLocaleString() }} Kč</p>
+  <div class="profile-container">
+    <div class="profile-banner">
+      <div class="overlay"></div>
+      <div class="profile-header">
+        <img :src="user?.avatar || 'https://via.placeholder.com/150'" alt="Profilový obrázek" class="avatar" />
+        <h1>{{ user?.firstName }} {{ user?.lastName }}</h1>
       </div>
     </div>
 
-    <div class="trades">
-      <h3>📈 Moje obchody</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Coin</th>
-            <th>Hodnota</th>
-            <th>Datum</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="trade in trades" :key="trade.id">
-            <td>{{ trade.id }}</td>
-            <td>{{ trade.coinType }}</td>
-            <td>{{ trade.worth.toLocaleString() }} Kč</td>
-            <td>{{ new Date(trade.dateCreated).toLocaleDateString() }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="profile-content">
+      <div class="info-card">
+        <h2>📊 Informace o uživateli</h2>
+        <p><strong>👤 Jméno:</strong> {{ user?.firstName }} {{ user?.lastName }}</p>
+        <p><strong>📧 Email:</strong> {{ user?.email }}</p>
+        <p><strong>💰 Stav portfolia:</strong> {{ user?.portfolioValue.toLocaleString() }} Kč</p>
+      </div>
+
+      <div class="trades-card">
+        <h2>📈 Moje obchody</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Coin</th>
+              <th>Hodnota</th>
+              <th>Datum</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="trade in trades" :key="trade.id">
+              <td>{{ trade.id }}</td>
+              <td>{{ trade.coinType }}</td>
+              <td>{{ trade.worth.toLocaleString() }} Kč</td>
+              <td>{{ new Date(trade.dateCreated).toLocaleDateString() }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
@@ -91,49 +87,101 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.profile {
-  max-width: 600px;
-  margin: 50px auto;
-  text-align: center;
-  font-family: Arial, sans-serif;
-}
-
-.avatar-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.profile-info {
+.profile-container {
+  background: #121212;
+  color: white;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif;
 }
 
-.trades {
-  text-align: center;
+.profile-banner {
+  width: 100%;
+  height: 250px;
+  background: url('https://source.unsplash.com/1600x500/?technology,finance') no-repeat center/cover;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.profile-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+}
+
+.profile-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: -40px;
+  width: 90%;
+  max-width: 1000px;
+}
+
+.info-card, .trades-card {
+  background: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 600px;
+}
+
+h2 {
+  margin-bottom: 10px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  background: #2a2a2a;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background: #333;
+}
+
+td {
+  border-bottom: 1px solid #444;
 }
 
 .error {
   color: red;
+  margin-top: 10px;
+}
+
+table tr:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transition: 0.3s;
 }
 </style>

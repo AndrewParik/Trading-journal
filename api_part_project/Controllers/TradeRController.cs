@@ -47,7 +47,8 @@ namespace api_part_project.Controllers
             if (tr == null)
             {
                 return NotFound(new { message = "Špatné jméno nebo heslo" });
-            } else { return Ok(tr); }
+            }
+            return Ok(tr);
         }
     }
 }

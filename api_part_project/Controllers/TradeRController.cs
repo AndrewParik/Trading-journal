@@ -43,6 +43,7 @@ namespace api_part_project.Controllers
         public IActionResult GetTraderLogIn(string us, string ps)
         {
             var tr = _context.Traders.FirstOrDefault(t => t.FullName == us || t.PassWord == ps);
+            tr!.Trades = _context.Trades.Where(t => t.IdTrader == tr.Id).ToList();
             if (tr == null)
             {
                 return NotFound(new { message = "Špatné jméno nebo heslo" });

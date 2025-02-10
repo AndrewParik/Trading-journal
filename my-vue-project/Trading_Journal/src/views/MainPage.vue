@@ -10,35 +10,33 @@ const errorMessage = ref('')
 const router = useRouter()
 
 const handleLogin = async () => {
-  if (firstName.value === 'admin' && lastName.value === 'admin' && password.value === 'password') {
-    router.push('/lobby')
-  }
-
   if (!firstName.value || !lastName.value || !password.value) {
     errorMessage.value = '❌ Prosím, vyplňte všechna pole.'
     return
   }
 
   const username = `${firstName.value.trim()} ${lastName.value.trim()}`
-  
-  try {
-    const response = await api.get(`/trader/login/${username}+${password.value}`)
 
+  console.log(`api/trader/login`);
+
+  try {
+    const response = await api.post(`api/trader/login`, {Username:username, Password:password.value})
 
     if (response.status === 200) {
       console.log('✅ Přihlášení úspěšné:', response.data)
-
-      localStorage.setItem('user', JSON.stringify(response.data))
-      localStorage.setItem('userId', response.data.id)
-
       router.push('/lobby')
     }
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response && error.response.status === 404) {
+      errorMessage.value = error.response.data.message
+    } else {
+      errorMessage.value = '❌ Neočekávaná chyba při přihlášení.'
+    }
+
     console.error('❌ Chyba při přihlášení:', error)
-    errorMessage.value = '❌ Nesprávné uživatelské jméno nebo heslo.'
   }
 }
-</script> http://localhost:5173/api/trader/login/Admin%20Minda/Password
+</script>
 
 <template>
   <div class="background-container">
@@ -68,10 +66,13 @@ const handleLogin = async () => {
   </div>
 </template>
 
-
 <style scoped>
+.body {
+  background-color: black;
+}
 .background-container {
   position: fixed;
+  background-color: black;
   top: 0;
   left: 0;
   width: 100%;
@@ -82,12 +83,12 @@ const handleLogin = async () => {
 }
 
 .login-box {
-  background: rgba(152, 101, 101, 0.95);
+  background: darkgray;
   padding: 30px;
   border-radius: 12px;
   text-align: center;
   width: 350px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 10px rgba(134, 133, 133, 0.2);
 }
 
 h1 {
@@ -102,7 +103,9 @@ h1 {
 input {
   width: 92.7%;
   padding: 12px;
-  border: 1px solid #ccc;
+  background-color: black;
+  border: 1px solid black;
+  color: white;
   border-radius: 8px;
   font-size: 16px;
 }

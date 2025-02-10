@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router'
 import api from '../api/axiosInstance'
 
 const router = useRouter()
-const userId = localStorage.getItem('userId')
 
 interface User {
   id: number
@@ -29,13 +28,13 @@ const trades = ref<Trade[]>([])
 const errorMessage = ref<string>('')
 
 const fetchUserData = async () => {
-  if (!userId) {
+  if (true) { //Dodělat podmínku
     errorMessage.value = '❌ Uživatel není přihlášen.'
     return
   }
 
   try {
-    const response = await api.get(`/trader/${userId}`)
+    const response = await api.get(`api/trader/}`)
     user.value = response.data
     trades.value = response.data.trades || []
   } catch (error) {
@@ -55,7 +54,8 @@ onMounted(fetchUserData)
         <router-link to="/lobby">🏠 Lobby</router-link>
         <router-link to="/profile">👤 Profil</router-link>
         <router-link to="/trades">📈 Obchody</router-link>
-        <router-link to="/" @click="userId = null">🚪 Odhlásit</router-link>
+        <router-link to="/">🚪 Odhlásit</router-link> 
+        
       </nav>
 
       <h1>📊 Přehled portfolia</h1>

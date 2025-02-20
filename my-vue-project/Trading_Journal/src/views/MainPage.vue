@@ -3,38 +3,42 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/axiosInstance'
 
+
 const firstName = ref('')
 const lastName = ref('')
-const password = ref('')
+const pass_word = ref('')
 const errorMessage = ref('')
 const router = useRouter()
 
 const handleLogin = async () => {
-  if (!firstName.value || !lastName.value || !password.value) {
+  if (!firstName.value || !lastName.value || !pass_word.value) {
     errorMessage.value = '❌ Prosím, vyplňte všechna pole.'
     return
-  }
-
   const username = `${firstName.value.trim()} ${lastName.value.trim()}`
-
-  console.log(`api/trader/login`);
+  } else {const user_name = `${firstName.value.trim()} ${lastName.value.trim()}`
 
   try {
-    const response = await api.post(`api/trader/login`, {Username:username, Password:password.value})
+    const response = await api.post(`/api/trader/login`, {
+      user_name: user_name, 
+      pass_word: pass_word.value
+      
+    })
 
-    if (response.status === 200) {
+    if (response.status === 200 && response.data.userId) {
       console.log('✅ Přihlášení úspěšné:', response.data)
-      router.push('/lobby')
-    }
+
+      router.push(`/lobby/${response.data.userId}`)
+    } 
   } catch (error: any) {
     if (error.response && error.response.status === 404) {
       errorMessage.value = error.response.data.message
     } else {
       errorMessage.value = '❌ Neočekávaná chyba při přihlášení.'
     }
-
     console.error('❌ Chyba při přihlášení:', error)
-  }
+  }}
+
+  
 }
 </script>
 
@@ -57,7 +61,7 @@ const handleLogin = async () => {
 
       <div class="form-group">
         <label for="password">Heslo</label>
-        <input type="password" id="password" v-model="password" placeholder="Zadejte heslo" />
+        <input type="password" id="password" v-model="pass_word" placeholder="Zadejte heslo" />
       </div>
 
       <button @click="handleLogin">🔑 Přihlásit se</button>

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import api from '../api/axiosInstance'
 
 const router = useRouter()
+const route = useRoute()
+const userId = route.params.id 
 
 interface User {
   id: number
@@ -28,17 +30,17 @@ const trades = ref<Trade[]>([])
 const errorMessage = ref<string>('')
 
 const fetchUserData = async () => {
-  if (true) { //Dodělat podmínku
+  if (!userId) {
     errorMessage.value = '❌ Uživatel není přihlášen.'
     return
   }
 
   try {
-    const response = await api.get(`api/trader/}`)
+    const response = await api.get(`api/trader/${userId}`)
     user.value = response.data
     trades.value = response.data.trades || []
   } catch (error) {
-    console.error('Chyba při načítání uživatelských dat:', error)
+    console.error('❌ Chyba při načítání uživatelských dat:', error)
     errorMessage.value = '❌ Nepodařilo se načíst uživatelská data.'
   }
 }
@@ -51,11 +53,10 @@ onMounted(fetchUserData)
     <div class="overlay"></div>
     <div class="lobby">
       <nav class="navbar">
-        <router-link to="/lobby">🏠 Lobby</router-link>
-        <router-link to="/profile">👤 Profil</router-link>
-        <router-link to="/trades">📈 Obchody</router-link>
+        <router-link :to="`/lobby/${userId}`">🏠 Lobby</router-link>
+        <router-link :to="`/profile/${userId}`">👤 Profil</router-link>
+        <router-link :to="`/trades/${userId}`">📈 Obchody</router-link>
         <router-link to="/">🚪 Odhlásit</router-link> 
-        
       </nav>
 
       <h1>📊 Přehled portfolia</h1>

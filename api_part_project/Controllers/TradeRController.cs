@@ -1,4 +1,5 @@
 ﻿using api_part_project.Class;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
@@ -39,15 +40,16 @@ namespace api_part_project.Controllers
             return Ok(trader);
         }
 
-        [HttpGet("login/{us}+{ps}")]
-        public IActionResult GetTraderLogIn(string us, string ps)
-        {
-            var tr = _context.Traders.FirstOrDefault(t => t.FullName == us || t.PassWord == ps);
-            tr!.Trades = _context.Trades.Where(t => t.IdTrader == tr.Id).ToList();
+        [HttpPost("login")]
+        public IActionResult GetTraderLogIn([FromBody] Login login)
+        {/*
+            var tr = _context.Traders.FirstOrDefault(t => t.FullName == login.UserName && t.PassWord == login.PassWord);
             if (tr == null)
             {
                 return NotFound(new { message = "Špatné jméno nebo heslo" });
-            } else { return Ok(tr); }
+            } else { tr.Trades = _context.Trades.Where(t => t.IdTrader == tr.Id).ToList(); return Ok(tr); }
+        */
+            return Ok($"jméno negra: {login.UserName}\nheslo negra: {login.PassWord}");
         }
     }
 }

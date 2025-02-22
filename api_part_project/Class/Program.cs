@@ -10,7 +10,7 @@ namespace api_part_project.Class
             {
                 options.AddPolicy("AllowAll", policy =>
                 {
-                    policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().SetPreflightMaxAge(TimeSpan.FromMinutes(10));
                 });
             });
             builder.WebHost.ConfigureKestrel(serverOptions =>

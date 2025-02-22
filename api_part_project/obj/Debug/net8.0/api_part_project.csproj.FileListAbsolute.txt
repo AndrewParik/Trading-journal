@@ -133,7 +133,6 @@ C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\s
 C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.api_part_project.props
 C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.api_part_project.props
 C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\api_part.BDEFD678.Up2Date
 C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\api_part_project.dll
 C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\refint\api_part_project.dll

@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/axiosInstance'
-
+import { userInfo } from 'os'
 
 const firstName = ref('')
 const lastName = ref('')
@@ -12,34 +12,43 @@ const router = useRouter()
 
 const handleLogin = async () => {
   if (!firstName.value || !lastName.value || !pass_word.value) {
-    errorMessage.value = '❌ Prosím, vyplňte všechna pole.'
-    return
-  const username = `${firstName.value.trim()} ${lastName.value.trim()}`
-  } else {const user_name = `${firstName.value.trim()} ${lastName.value.trim()}`
+    errorMessage.value = '❌ Prosím, vyplňte všechna pole.';
+    return;
+  }
+
+  const user_name = `${firstName.value.trim()} ${lastName.value.trim()}`;
 
   try {
-    const response = await api.post(`/api/trader/login`, {
-      user_name: user_name, 
-      pass_word: pass_word.value
-      
-    })
+        const response = await api.post('/trader/login', 
+      {
+        UserName: user_name, 
+        PassWord: pass_word.value
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
 
     if (response.status === 200 && response.data.userId) {
-      console.log('✅ Přihlášení úspěšné:', response.data)
-
-      router.push(`/lobby/${response.data.userId}`)
-    } 
+      console.log('✅ Přihlášení úspěšné:', response.data);
+      router.push(`/lobby/${response.data.userId}`);
+    } else {
+      errorMessage.value = '❌ Neplatné přihlašovací údaje.';
+    }
   } catch (error: any) {
     if (error.response && error.response.status === 404) {
-      errorMessage.value = error.response.data.message
+      errorMessage.value = error.response.data.message;
     } else {
-      errorMessage.value = '❌ Neočekávaná chyba při přihlášení.'
+      errorMessage.value = '❌ Neočekávaná chyba při přihlášení.';
     }
-    console.error('❌ Chyba při přihlášení:', error)
-  }}
+  }
+};
 
-  
-}
+
+
 </script>
 
 <template>
@@ -71,9 +80,6 @@ const handleLogin = async () => {
 </template>
 
 <style scoped>
-.body {
-  background-color: black;
-}
 .background-container {
   position: fixed;
   background-color: black;

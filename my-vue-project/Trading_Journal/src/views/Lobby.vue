@@ -5,7 +5,7 @@ import api from '../api/axiosInstance'
 
 const router = useRouter()
 const route = useRoute()
-const userId = route.params.id 
+const userId = route.params.id
 
 interface User {
   id: number
@@ -36,7 +36,7 @@ const fetchUserData = async () => {
   }
 
   try {
-    const response = await api.get(`api/trader/${userId}`)
+    const response = await api.get(`/api/trader/${userId}`)
     user.value = response.data
     trades.value = response.data.trades || []
   } catch (error) {
@@ -106,6 +106,7 @@ onMounted(fetchUserData)
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .background-container {

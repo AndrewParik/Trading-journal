@@ -13,6 +13,11 @@ namespace api_part_project.Class
                     policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
+            builder.WebHost.ConfigureKestrel(serverOptions =>
+            {
+                serverOptions.Limits.MaxRequestHeadersTotalSize = 16384; // Zvýší limit hlaviček na 16 KB
+            });
+
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

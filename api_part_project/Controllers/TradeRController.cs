@@ -28,28 +28,39 @@ namespace api_part_project.Controllers
             return Ok(_context.Traders);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("/{id}")]
         public async Task<IActionResult> GetTraderById(int id)
         {
             var trader = await _context.Traders.FirstOrDefaultAsync(t => t.Id == id);
-            if ( trader == null)
+            if (trader == null)
             {
                 return NotFound(new { message = "Obchodník nenalezen." });
+            } else
+            {
+                trader.Trades = await _context.Trades.Where(t => t.IdTrader == id).ToListAsync();
+                return Ok(trader);
             }
-            trader.Trades = await _context.Trades.Where(t => t.IdTrader == id).ToListAsync();
-            return Ok(trader);
         }
 
         [HttpPost("login")]
-        public IActionResult GetTraderLogIn([FromBody] Login login)
-        {/*
-            var tr = _context.Traders.FirstOrDefault(t => t.FullName == login.UserName && t.PassWord == login.PassWord);
-            if (tr == null)
+        public async Task<IActionResult> GetTraderLogIn([FromBody] Login login)
+        {
+            if (string.IsNullOrWhiteSpace(login.UserName) || string.IsNullOrWhiteSpace(login.PassWord))
             {
-                return NotFound(new { message = "Špatné jméno nebo heslo" });
-            } else { tr.Trades = _context.Trades.Where(t => t.IdTrader == tr.Id).ToList(); return Ok(tr); }
-        */
-            return Ok($"jméno negra: {login.UserName}\nheslo negra: {login.PassWord}");
+                return BadRequest(new { msg = "Údaje pro přihlášení nesmí být prázdné!" });
+            }
+            else
+            {
+                var tr = await _context.Traders.FirstOrDefaultAsync(t => t.FullName == login.UserName && t.PassWord == login.PassWord);
+                if (tr is null)
+                {
+                    return BadRequest(new { msg = "Špatné údaje pro přihlášení" });
+                } else
+                {
+                    tr!.Trades = await _context.Trades.Where(t => t.IdTrader == tr.Id).ToListAsync();
+                    return Ok(tr);
+                }
+            }
         }
     }
 }

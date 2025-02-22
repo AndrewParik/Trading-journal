@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/axiosInstance'
-import { userInfo } from 'os'
 
 const firstName = ref('')
 const lastName = ref('')
@@ -24,11 +23,6 @@ const handleLogin = async () => {
         UserName: user_name, 
         PassWord: pass_word.value
       },
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
     );
 
 

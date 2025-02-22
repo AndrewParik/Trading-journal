@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 namespace api_part_project.Controllers
 {
     [Route("api/trader")]
+    [ApiController]
+    [EnableCors("AllowAll")]
     public class TraderController : Controller
     {
         private readonly AppDbContext _context;

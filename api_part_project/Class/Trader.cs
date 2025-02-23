@@ -7,6 +7,7 @@ namespace api_part_project.Class
     public class Trader
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("Id")]
         public int Id { get; set; }
         [Column("FirstName")]

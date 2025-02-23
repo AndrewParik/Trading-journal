@@ -1,5 +1,7 @@
 ﻿using api_part_project.Class;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace api_part_project.Controllers
 {
@@ -30,6 +32,21 @@ namespace api_part_project.Controllers
                 return NotFound(new { message = "Obchod nenalezen." });
             }
             return Ok(trade);
+        }
+        [HttpPost("/add")]
+        public IActionResult AddTrade([FromBody] Trade trade)
+        {
+            _context.Trades.Add(trade);
+            _context.SaveChanges();
+            return Ok(new { msg = "Nový obchod úspěšně přidán." });
+        }
+        [HttpDelete("del/{id}")]
+        public async Task<IActionResult> RemoveTrade(int id)
+        {
+            var tr = await _context.Trades.FindAsync(id);
+            _context.Trades.Remove(tr!);
+            await _context.SaveChangesAsync();
+            return Ok(new { msg = "Záznam úspěšně odstraněn" });
         }
     }
 }

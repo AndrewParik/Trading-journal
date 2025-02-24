@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\",
+  "WorkspaceRootPath": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\tom\\onedrive\\plocha\\trading-journal\\api_part_project\\controllers\\tradercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\controllers\\tradercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:controllers\\tradercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -14,19 +14,23 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "TradeRController.cs",
-              "DocumentMoniker": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\Controllers\\TradeRController.cs",
+              "DocumentMoniker": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\Controllers\\TradeRController.cs",
               "RelativeDocumentMoniker": "Controllers\\TradeRController.cs",
-              "ToolTip": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\Controllers\\TradeRController.cs",
+              "ToolTip": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\Controllers\\TradeRController.cs",
               "RelativeToolTip": "Controllers\\TradeRController.cs",
-              "ViewState": "AgIAAEsAAAAAAAAAAAA4wGIAAAA/AAAAAAAAAA==",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAcwFkAAABYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-23T21:51:35.317Z",
+              "WhenOpened": "2025-02-24T07:13:37.186Z",
               "EditorCaption": ""
             }
           ]

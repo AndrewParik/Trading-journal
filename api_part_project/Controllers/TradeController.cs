@@ -41,7 +41,7 @@ namespace api_part_project.Controllers
             await _context.SaveChangesAsync();
             return Ok(tr!.Trades);
         }
-        [HttpDelete("del/{id}")]
+        [HttpDelete("/del/{id}")]
         public async Task<IActionResult> RemoveTrade(int id)
         {
             var te = await _context.Trades.FindAsync(id);

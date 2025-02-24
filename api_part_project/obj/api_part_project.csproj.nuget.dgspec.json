@@ -1,23 +1,6 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    "/Users/ondrejparik/Documents/GitHub/Trading-journal/api_part_project/api_part_project.csproj": {}
-  },
-  "projects": {
-    "/Users/ondrejparik/Documents/GitHub/Trading-journal/api_part_project/api_part_project.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "/Users/ondrejparik/Documents/GitHub/Trading-journal/api_part_project/api_part_project.csproj",
-        "projectName": "api_part_project",
-        "projectPath": "/Users/ondrejparik/Documents/GitHub/Trading-journal/api_part_project/api_part_project.csproj",
-        "packagesPath": "/Users/ondrejparik/.nuget/packages/",
-        "outputPath": "/Users/ondrejparik/Documents/GitHub/Trading-journal/api_part_project/obj/",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "/Users/ondrejparik/.nuget/NuGet/NuGet.Config"
-=======
     "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\api_part_project.csproj": {}
   },
   "projects": {
@@ -26,16 +9,6 @@
       "restore": {
         "projectUniqueName": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\api_part_project.csproj",
         "projectName": "api_part_project",
-=======
-    "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\api_part_project.csproj": {}
-  },
-  "projects": {
-    "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\api_part_project.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\api_part_project.csproj",
-        "projectName": "api_part_project",
->>>>>>> Stashed changes
         "projectPath": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\api_part_project.csproj",
         "packagesPath": "C:\\Users\\Tom\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\obj\\",
@@ -47,20 +20,13 @@
           "C:\\Users\\Tom\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
->>>>>>> Stashed changes
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-<<<<<<< Updated upstream
-=======
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -109,20 +75,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.13, 8.0.13]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.osx-arm64",
-              "version": "[8.0.13, 8.0.13]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.13, 8.0.13]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -131,15 +83,7 @@
               "privateAssets": "all"
             }
           },
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.200/PortableRuntimeIdentifierGraph.json"
-=======
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
->>>>>>> Stashed changes
-=======
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
->>>>>>> Stashed changes
         }
       }
     }

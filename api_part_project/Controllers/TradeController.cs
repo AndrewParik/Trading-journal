@@ -23,30 +23,32 @@ namespace api_part_project.Controllers
             return Ok(_context.Trades);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetTradeById(int id)
+        [HttpGet("/{id}")]
+        public async Task<IActionResult> GetTradeById(int id)
         {
-            var trade = _context.Trades.FirstOrDefault(t => t.Id == id);
-            if (trade == null)
+            var te = await _context.Trades.FirstOrDefaultAsync(t => t.Id == id);
+            if (te == null)
             {
                 return NotFound(new { message = "Obchod nenalezen." });
             }
-            return Ok(trade);
+            return Ok(te);
         }
         [HttpPost("/add")]
-        public IActionResult AddTrade([FromBody] Trade trade)
+        public async Task<IActionResult> AddTrade([FromBody] Trade te)
         {
-            _context.Trades.Add(trade);
-            _context.SaveChanges();
-            return Ok(new { msg = "Nový obchod úspěšně přidán." });
+            _context.Trades.Add(te);
+            var tr = await _context.Traders.FindAsync(te.IdTrader);
+            await _context.SaveChangesAsync();
+            return Ok(tr!.Trades);
         }
         [HttpDelete("del/{id}")]
         public async Task<IActionResult> RemoveTrade(int id)
         {
-            var tr = await _context.Trades.FindAsync(id);
-            _context.Trades.Remove(tr!);
+            var te = await _context.Trades.FindAsync(id);
+            var tr = await _context.Traders.FindAsync(te!.IdTrader);
+            _context.Trades.Remove(te!);
             await _context.SaveChangesAsync();
-            return Ok(new { msg = "Záznam úspěšně odstraněn" });
+            return Ok(tr!.Trades);
         }
     }
 }

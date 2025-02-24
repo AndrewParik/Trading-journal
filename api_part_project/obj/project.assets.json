@@ -1859,6 +1859,7 @@
       "path": "system.io/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -1967,6 +1968,7 @@
       "path": "system.reflection/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -2047,6 +2049,7 @@
       "path": "system.reflection.primitives/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -2103,6 +2106,7 @@
       "path": "system.runtime/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -2316,6 +2320,7 @@
       "path": "system.text.encoding/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -2528,6 +2533,7 @@
       "path": "system.threading.tasks/4.3.0",
       "files": [
         ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -2681,38 +2687,14 @@
     ]
   },
   "packageFolders": {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    "/Users/ondrejparik/.nuget/packages/": {}
-=======
     "C:\\Users\\Tom\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
->>>>>>> Stashed changes
-=======
-    "C:\\Users\\Tom\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
->>>>>>> Stashed changes
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-      "projectUniqueName": "/Users/ondrejparik/Documents/GitHub/Trading-journal/api_part_project/api_part_project.csproj",
-      "projectName": "api_part_project",
-      "projectPath": "/Users/ondrejparik/Documents/GitHub/Trading-journal/api_part_project/api_part_project.csproj",
-      "packagesPath": "/Users/ondrejparik/.nuget/packages/",
-      "outputPath": "/Users/ondrejparik/Documents/GitHub/Trading-journal/api_part_project/obj/",
-      "projectStyle": "PackageReference",
-      "configFilePaths": [
-        "/Users/ondrejparik/.nuget/NuGet/NuGet.Config"
-=======
       "projectUniqueName": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\api_part_project.csproj",
       "projectName": "api_part_project",
-=======
-      "projectUniqueName": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\api_part_project.csproj",
-      "projectName": "api_part_project",
->>>>>>> Stashed changes
       "projectPath": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\api_part_project.csproj",
       "packagesPath": "C:\\Users\\Tom\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\obj\\",
@@ -2724,20 +2706,13 @@
         "C:\\Users\\Tom\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
->>>>>>> Stashed changes
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-<<<<<<< Updated upstream
-=======
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Program Files\\dotnet\\library-packs": {},
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -2786,20 +2761,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[8.0.13, 8.0.13]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.osx-arm64",
-            "version": "[8.0.13, 8.0.13]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[8.0.13, 8.0.13]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -2808,16 +2769,16 @@
             "privateAssets": "all"
           }
         },
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.200/PortableRuntimeIdentifierGraph.json"
-=======
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
->>>>>>> Stashed changes
-=======
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
->>>>>>> Stashed changes
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Při čtení souboru mezipaměti C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\obj\\project.nuget.cache došlo k problému: Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

@@ -16,13 +16,11 @@ namespace api_part_project.Controllers
             _context = appDbContext;
         }
 
-
         [HttpGet]
         public IActionResult GetAllTrades()
         {
             return Ok(_context.Trades);
         }
-
         [HttpGet("/{id}")]
         public async Task<IActionResult> GetTradeById(int id)
         {

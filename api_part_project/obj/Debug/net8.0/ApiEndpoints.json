@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "api_part_project.Controllers.TradeController",
+    "Method": "GetTradeById",
+    "RelativePath": "{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "api_part_project.Controllers.TraderController",
     "Method": "GetTraderById",
     "RelativePath": "{id}",
@@ -24,7 +40,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "trade",
+        "Name": "te",
         "Type": "api_part_project.Class.Trade",
         "IsRequired": true
       }
@@ -39,38 +55,6 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "api_part_project.Controllers.TradeController",
-    "Method": "GetTradeById",
-    "RelativePath": "api/trade/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "api_part_project.Controllers.TradeController",
-    "Method": "RemoveTrade",
-    "RelativePath": "api/trade/del/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
     "ReturnTypes": []
   },
   {
@@ -126,6 +110,22 @@
       {
         "Name": "trader",
         "Type": "api_part_project.Class.Trader",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "api_part_project.Controllers.TradeController",
+    "Method": "RemoveTrade",
+    "RelativePath": "del/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],

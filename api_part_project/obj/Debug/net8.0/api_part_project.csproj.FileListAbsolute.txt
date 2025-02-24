@@ -139,3 +139,4 @@ C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\r
 C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\api_part_project.pdb
 C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\api_part_project.genruntimeconfig.cache
 C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\ref\api_part_project.dll
+C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

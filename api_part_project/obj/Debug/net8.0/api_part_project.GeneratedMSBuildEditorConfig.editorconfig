@@ -9,13 +9,29 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = api_part_project
 build_property.RootNamespace = api_part_project
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 build_property.ProjectDir = /Users/ondrejparik/Documents/GitHub/Trading-journal/api_part_project/
+=======
+build_property.ProjectDir = C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\
+>>>>>>> Stashed changes
+=======
+build_property.ProjectDir = C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project\
+>>>>>>> Stashed changes
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 build_property.MSBuildProjectDirectory = /Users/ondrejparik/Documents/GitHub/Trading-journal/api_part_project
+=======
+build_property.MSBuildProjectDirectory = C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project
+>>>>>>> Stashed changes
+=======
+build_property.MSBuildProjectDirectory = C:\Users\Tom\OneDrive\Plocha\Trading-journal\api_part_project
+>>>>>>> Stashed changes
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 

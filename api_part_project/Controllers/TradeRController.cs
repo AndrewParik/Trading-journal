@@ -87,17 +87,13 @@ namespace api_part_project.Controllers
         [HttpPut("edit")]
         public async Task<IActionResult> EditTrader([FromBody] dynamic data)
         {
-            if (data is null || data.Id is null || string.IsNullOrWhiteSpace(data.FirstName) || string.IsNullOrWhiteSpace(data!.LastName) || string.IsNullOrWhiteSpace(data!.PassWord))
-            {
-                return BadRequest(new { msg = "Údaje sou empty" });
-            } else
-            {
-                int id = data!.Id;
-                var tr = await _context.Traders.FirstOrDefaultAsync(t => t.Id == id);
-                tr!.FirstName = data.FirstName; tr!.LastName = data.LastName; tr!.PassWord = data.PassWord;
-                await _context.SaveChangesAsync();
-                return Ok(new { msg = "Data aktualizována." });
-            }
+            int id = data.Id;
+            var tr = await _context.Traders.FirstOrDefaultAsync(t => t.Id == id);
+            if (data.FirstName != null) tr!.FirstName = data.FirstName;
+            if (data.LastName != null) tr!.LastName = data.LastName;
+            if (data.PassWord != null) tr!.PassWord = data.PassWord;
+            await _context.SaveChangesAsync();
+            return Ok(tr);
         }
     }
 }

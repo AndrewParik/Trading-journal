@@ -3,46 +3,23 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '../api/axiosInstance'
 
-const profil = ref(JSON.parse(localStorage.getItem('user') || '{}'));
-
-onMounted(() => {
-  if (!profil.value.userId) {
-    errorMessage.value = '❌ Uživatel není přihlášen.';
-    router.push('/');
-  }
-});
-
-
 const route = useRoute()
 const router = useRouter()
-const userId = route.params.id
+const userId = ref(route.params.id)
 
-interface User {
-  id: number
-  firstName: string
-  lastName: string
-  portfolioValue: number
-  trades: Trade[]
-}
+const user = ref({
+  firstName: '',
+  lastName: '',
+  portfolioValue: 0
+})
 
-interface Trade {
-  id: number
-  coinType: string
-  worth: number
-  dateCreated: string
-}
-
-const user = ref<User | null>(null)
+const trades = ref([])
 const errorMessage = ref('')
 
-const fetchUserData = async () => {
-  if (!userId) {
-    errorMessage.value = '❌ Uživatel není přihlášen.'
-    return
-  }
 
+const fetchUserData = async () => {
   try {
-    const response = await api.get(`/trader/${userId}`)
+    const response = await api.get(`/trader/${userId.value}`)
     user.value = response.data
   } catch (error) {
     console.error('❌ Chyba při načítání uživatele:', error)
@@ -50,7 +27,20 @@ const fetchUserData = async () => {
   }
 }
 
-onMounted(fetchUserData)
+const fetchUserTrades = async () => {
+  try {
+    const response = await api.get(`/trader/${userId.value}/trades`)
+    trades.value = response.data
+  } catch (error) {
+    console.error('❌ Chyba při načítání obchodů:', error)
+    errorMessage.value = '❌ Nepodařilo se načíst obchody.'
+  }
+}
+
+onMounted(async () => {
+  await fetchUserData()
+  await fetchUserTrades()
+})
 </script>
 
 <template>
@@ -58,19 +48,19 @@ onMounted(fetchUserData)
     <div class="profile-banner">
       <div class="overlay"></div>
       <div class="profile-header">
-        <h1 v-if="user">{{ user.firstName }} {{ user.lastName }}</h1>
+        <h1 v-if="user.firstName">{{ user.firstName }} {{ user.lastName }}</h1>
         <h1 v-else>⏳ Načítání...</h1>
       </div>
     </div>
 
     <div class="profile-content">
-      <div class="info-card" v-if="user">
+      <div class="info-card" v-if="user.firstName">
         <h2>📊 Informace o uživateli</h2>
         <p><strong>👤 Jméno:</strong> {{ user.firstName }} {{ user.lastName }}</p>
         <p><strong>💰 Stav portfolia:</strong> {{ user.portfolioValue.toLocaleString() }} Kč</p>
       </div>
 
-      <div class="trades-card" v-if="user && user.trades.length">
+      <div class="trades-card" v-if="trades.length">
         <h2>📈 Moje obchody</h2>
         <table>
           <thead>
@@ -82,7 +72,7 @@ onMounted(fetchUserData)
             </tr>
           </thead>
           <tbody>
-            <tr v-for="trade in user.trades" :key="trade.id">
+            <tr v-for="trade in trades" :key="trade.id">
               <td>{{ trade.id }}</td>
               <td>{{ trade.coinType }}</td>
               <td>{{ trade.worth.toLocaleString() }} Kč</td>

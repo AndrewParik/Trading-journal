@@ -8,26 +8,22 @@ const user1 = ref(JSON.parse(localStorage.getItem('user') || '{}'))
 const successMessage = ref('')
 const errorMessage = ref('')
 
-// Načtení původních dat uživatele z localStorage
 const originalProfil = ref({
   firstName: user1.value.firstName || '',
   lastName: user1.value.lastName || '',
   passWord: user1.value.passWord || ''
 })
 
-// Nové údaje (editovatelné) – kopie původních dat
 const profil = ref({ ...originalProfil.value })
 
-// Automatické předvyplnění inputů při načtení stránky
 onMounted(() => {
   if (!user1.value.userId) {
     router.push('/')
   } else {
-    profil.value = { ...originalProfil.value } // Kopíruje data do inputů
+    profil.value = { ...originalProfil.value } 
   }
 })
 
-// Funkce ověří, zda byly provedeny nějaké změny
 const isChanged = computed(() => {
   return (
     profil.value.firstName !== originalProfil.value.firstName ||
@@ -36,7 +32,6 @@ const isChanged = computed(() => {
   )
 })
 
-// Funkce pro uložení změn
 const saveChanges = async () => {
   if (!isChanged.value) {
     errorMessage.value = '❌ Nebyla provedena žádná změna.'
@@ -45,16 +40,15 @@ const saveChanges = async () => {
 
   try {
     const response = await api.put('/trader/edit', {
-      id: user1.value.userId,
+      Id: user1.value.userId,
       FirstName: profil.value.firstName,
       LastName: profil.value.lastName,
       PassWord: profil.value.passWord
     })
 
     if (response.status === 200) {
-      // Aktualizace localStorage a původních dat
       localStorage.setItem('user', JSON.stringify({ ...user1.value, ...profil.value }))
-      originalProfil.value = { ...profil.value } // Aktualizace referenčních hodnot
+      originalProfil.value = { ...profil.value }
       successMessage.value = '✅ Údaje úspěšně aktualizovány!'
       errorMessage.value = ''
     } else {

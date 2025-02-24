@@ -18,13 +18,13 @@ const handleRegister = async () => {
 
   try {
     const response = await api.post('/trader/new', {
-      firstName: firstName.value,
-      lastName: lastName.value,
-      passWord: passWord.value
+      FirstName: firstName.value,
+      LastName: lastName.value,
+      PassWord: passWord.value
     })
 
     if (response.status === 201) {
-      successMessage.value = '✅ Registrace úspěšná! Přesměrování na přihlášení...'
+      successMessage.value = '✅ Registrace úspěšná!'
       setTimeout(() => router.push('/'), 2000) 
     } else {
       errorMessage.value = '❌ Nepodařilo se zaregistrovat.'

@@ -6,7 +6,8 @@ import api from '../api/axiosInstance'
 const route = useRoute()
 const router = useRouter()
 const userId = route.params.id
-const user1 = ref(JSON.parse(localStorage.getItem('user') || '{}'));
+
+const user = ref(JSON.parse(localStorage.getItem('user') || '{}'));
 
 interface Trade {
   id: number
@@ -17,37 +18,58 @@ interface Trade {
 }
 
 const trade = ref<Trade | null>(null)
+const trades = ref<Trade[]>([]) 
 const errorMessage = ref<string>('')
 
-const fetchTrade = async () => {
+const newTrade = ref({
+  coinType: '',
+  worth: 0,
+  dateCreated: new Date().toISOString(),
+  idTrader: user.value.userId
+})
+
+const fetchTrades = async () => {
   try {
-    const response = await api.get('/trader/login',   
-    {
-      
-    }
-  )
-    } catch (error) {
-    console.error('Chyba při načítání detailu obchodu:', error)
-    errorMessage.value = '❌ Nepodařilo se načíst obchod.'
+    const response = await api.get(`/trader/${userId}`)
+    trades.value = response.data.trades || []
+  } catch (error) {
+    console.error('Chyba při načítání obchodů:', error)
+    errorMessage.value = '❌ Nepodařilo se načíst obchody.'
   }
 }
 
-const deleteTrade = async () => {
-  if (!trade.value) return
+const addTrade = async () => {
+  if (!newTrade.value.coinType || newTrade.value.worth <= 0) {
+    errorMessage.value = '❌ Vyplňte všechny údaje správně.'
+    return
+  }
 
+  try {
+    const response = await api.post('/trade/add', newTrade.value)
+
+    trades.value = response.data 
+    newTrade.value = { coinType: '', worth: 0, dateCreated: new Date().toISOString(), idTrader: user.value.userId }
+    errorMessage.value = ''
+    alert('✅ Obchod úspěšně přidán!')
+  } catch (error) {
+    errorMessage.value = '❌ Nepodařilo se přidat obchod.'
+  }
+}
+
+const deleteTrade = async (tradeId: number) => {
   if (!confirm('⚠️ Opravdu chcete odstranit tento obchod?')) return
 
   try {
-    await api.delete(`/trades/${trade.value.id}`)
+    const response = await api.delete(`/trade/del/${tradeId}`)
+    trades.value = response.data 
     alert('✅ Obchod úspěšně odstraněn!')
-    router.push(`/trades/${userId}`)
   } catch (error) {
     console.error('Chyba při mazání obchodu:', error)
     errorMessage.value = '❌ Nepodařilo se odstranit obchod.'
   }
 }
 
-onMounted(fetchTrade)
+onMounted(fetchTrades)
 </script>
 
 <template>
@@ -61,14 +83,45 @@ onMounted(fetchTrade)
         <router-link to="/">🚪 Odhlásit</router-link> 
       </nav>
 
-      <div v-if="trade">
-        <h1>📜 Detail obchodu: {{ trade.coinType }}</h1>
-        <p><strong>🆔 ID:</strong> {{ trade.id }}</p>
-        <p><strong>📅 Datum:</strong> {{ new Date(trade.dateCreated).toLocaleDateString() }}</p>
-        <p><strong>💰 Hodnota:</strong> {{ trade.worth.toLocaleString() }} Kč</p>
-        <p><strong>👤 ID obchodníka:</strong> {{ trade.idTrader }}</p>
+      <h1>📜 Moje obchody</h1>
 
-        <button class="delete" @click="deleteTrade">🗑️ Smazat obchod</button>
+      <div class="add-trade-form">
+        <h2>➕ Přidat nový obchod</h2>
+        <div class="form-group">
+          <label for="coinType">Coin Type</label>
+          <input type="text" id="coinType" v-model="newTrade.coinType" placeholder="Např. BTC" />
+        </div>
+        <div class="form-group">
+          <label for="worth">Hodnota (Kč)</label>
+          <input type="number" id="worth" v-model="newTrade.worth" placeholder="Např. 10000" />
+        </div>
+        <button @click="addTrade" class="primary-btn">💾 Přidat obchod</button>
+      </div>
+
+      <div v-if="trades.length > 0">
+        <h2>📈 Seznam obchodů</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Coin</th>
+              <th>Hodnota</th>
+              <th>Datum</th>
+              <th>Akce</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="trade in trades" :key="trade.id">
+              <td>{{ trade.id }}</td>
+              <td>{{ trade.coinType }}</td>
+              <td>{{ trade.worth.toLocaleString() }} Kč</td>
+              <td>{{ new Date(trade.dateCreated).toLocaleDateString() }}</td>
+              <td>
+                <button class="delete" @click="deleteTrade(trade.id)">🗑️ Smazat</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
@@ -126,10 +179,41 @@ onMounted(fetchTrade)
   border-radius: 5px;
 }
 
+.add-trade-form {
+  background: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.primary-btn {
+  background: #27ae60;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background: #219150;
+}
+
 .delete {
   background: #e74c3c;
   color: white;
-  padding: 10px 15px;
+  padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -140,5 +224,6 @@ onMounted(fetchTrade)
 
 .error {
   color: red;
+  margin-top: 10px;
 }
 </style>

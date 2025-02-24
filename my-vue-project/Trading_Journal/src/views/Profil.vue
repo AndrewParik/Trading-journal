@@ -1,44 +1,56 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import api from '../api/axiosInstance'
 
-const user = ref<{
-  id: number,
-  firstName: string,
-  lastName: string,
-  email: string,
-  avatar: string,
+const profil = ref(JSON.parse(localStorage.getItem('user') || '{}'));
+
+onMounted(() => {
+  if (!profil.value.userId) {
+    errorMessage.value = '❌ Uživatel není přihlášen.';
+    router.push('/');
+  }
+});
+
+
+const route = useRoute()
+const router = useRouter()
+const userId = route.params.id
+
+interface User {
+  id: number
+  firstName: string
+  lastName: string
   portfolioValue: number
-} | null>(null)
+  trades: Trade[]
+}
 
-const trades = ref<Array<{
-  id: number,
-  coinType: string,
-  worth: number,
-  dateCreated: string,
-  idTrader: number
-}>>([])
+interface Trade {
+  id: number
+  coinType: string
+  worth: number
+  dateCreated: string
+}
 
+const user = ref<User | null>(null)
 const errorMessage = ref('')
 
 const fetchUserData = async () => {
-  if (!user.value?.id) {
+  if (!userId) {
     errorMessage.value = '❌ Uživatel není přihlášen.'
     return
   }
+
   try {
-    const response = await api.get(`/api/trader/${user.value?.id}`)
+    const response = await api.get(`/trader/${userId}`)
     user.value = response.data
-    trades.value = response.data.trades 
   } catch (error) {
-    console.error('Chyba při načítání uživatele:', error)
+    console.error('❌ Chyba při načítání uživatele:', error)
     errorMessage.value = '❌ Nepodařilo se načíst uživatelská data.'
   }
 }
 
-onMounted(async () => {
-  await fetchUserData()
-})
+onMounted(fetchUserData)
 </script>
 
 <template>
@@ -46,20 +58,19 @@ onMounted(async () => {
     <div class="profile-banner">
       <div class="overlay"></div>
       <div class="profile-header">
-        <img :src="user?.avatar || 'https://via.placeholder.com/150'" alt="Profilový obrázek" class="avatar" />
-        <h1>{{ user?.firstName }} {{ user?.lastName }}</h1>
+        <h1 v-if="user">{{ user.firstName }} {{ user.lastName }}</h1>
+        <h1 v-else>⏳ Načítání...</h1>
       </div>
     </div>
 
     <div class="profile-content">
-      <div class="info-card">
+      <div class="info-card" v-if="user">
         <h2>📊 Informace o uživateli</h2>
-        <p><strong>👤 Jméno:</strong> {{ user?.firstName }} {{ user?.lastName }}</p>
-        <p><strong>📧 Email:</strong> {{ user?.email }}</p>
-        <p><strong>💰 Stav portfolia:</strong> {{ user?.portfolioValue.toLocaleString() }} Kč</p>
+        <p><strong>👤 Jméno:</strong> {{ user.firstName }} {{ user.lastName }}</p>
+        <p><strong>💰 Stav portfolia:</strong> {{ user.portfolioValue.toLocaleString() }} Kč</p>
       </div>
 
-      <div class="trades-card">
+      <div class="trades-card" v-if="user && user.trades.length">
         <h2>📈 Moje obchody</h2>
         <table>
           <thead>
@@ -71,7 +82,7 @@ onMounted(async () => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="trade in trades" :key="trade.id">
+            <tr v-for="trade in user.trades" :key="trade.id">
               <td>{{ trade.id }}</td>
               <td>{{ trade.coinType }}</td>
               <td>{{ trade.worth.toLocaleString() }} Kč</td>
@@ -80,9 +91,9 @@ onMounted(async () => {
           </tbody>
         </table>
       </div>
-    </div>
 
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    </div>
   </div>
 </template>
 
@@ -119,14 +130,6 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 20px;
-}
-
-.avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid white;
 }
 
 .profile-content {

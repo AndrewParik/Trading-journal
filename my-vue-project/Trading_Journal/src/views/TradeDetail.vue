@@ -6,6 +6,7 @@ import api from '../api/axiosInstance'
 const route = useRoute()
 const router = useRouter()
 const userId = route.params.id
+const user1 = ref(JSON.parse(localStorage.getItem('user') || '{}'));
 
 interface Trade {
   id: number
@@ -20,9 +21,12 @@ const errorMessage = ref<string>('')
 
 const fetchTrade = async () => {
   try {
-    const response = await api.get(`/api/trades/${route.params.id}`)
-    trade.value = response.data
-  } catch (error) {
+    const response = await api.get('/trader/login',   
+    {
+      
+    }
+  )
+    } catch (error) {
     console.error('Chyba při načítání detailu obchodu:', error)
     errorMessage.value = '❌ Nepodařilo se načíst obchod.'
   }
@@ -34,7 +38,7 @@ const deleteTrade = async () => {
   if (!confirm('⚠️ Opravdu chcete odstranit tento obchod?')) return
 
   try {
-    await api.delete(`/api/trades/${trade.value.id}`)
+    await api.delete(`/trades/${trade.value.id}`)
     alert('✅ Obchod úspěšně odstraněn!')
     router.push(`/trades/${userId}`)
   } catch (error) {

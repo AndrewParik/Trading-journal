@@ -18,30 +18,24 @@ const handleLogin = async () => {
   const user_name = `${firstName.value.trim()} ${lastName.value.trim()}`;
 
   try {
-        const response = await api.post('/trader/login', 
-      {
-        UserName: user_name, 
-        PassWord: pass_word.value
-      },
-    );
+    const response = await api.post('/trader/login', {
+      UserName: user_name,
+      PassWord: pass_word.value
+    });
 
-
-    if (response.status === 200 && response.data.userId) {
+    if (response.data) {
       console.log('✅ Přihlášení úspěšné:', response.data);
+
+      localStorage.setItem('user', JSON.stringify(response.data));
+
       router.push(`/lobby/${response.data.userId}`);
     } else {
       errorMessage.value = '❌ Neplatné přihlašovací údaje.';
     }
-  } catch (error: any) {
-    if (error.response && error.response.status === 404) {
-      errorMessage.value = error.response.data.message;
-    } else {
-      errorMessage.value = '❌ Neočekávaná chyba při přihlášení.';
-    }
+  } catch (error) {
+    errorMessage.value = '❌ Chyba při přihlášení.';
   }
 };
-
-
 
 </script>
 

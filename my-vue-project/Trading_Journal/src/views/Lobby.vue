@@ -11,8 +11,6 @@ interface User {
   id: number
   firstName: string
   lastName: string
-  email?: string
-  avatar?: string
   portfolioValue: number
   trades: Trade[]
 }
@@ -56,6 +54,7 @@ onMounted(fetchUserData)
         <router-link :to="`/lobby/${userId}`">🏠 Lobby</router-link>
         <router-link :to="`/profile/${userId}`">👤 Profil</router-link>
         <router-link :to="`/trades/${userId}`">📈 Obchody</router-link>
+        <router-link :to="`/edit/${userId}`">Upravit</router-link>
         <router-link to="/">🚪 Odhlásit</router-link> 
       </nav>
 
@@ -68,10 +67,8 @@ onMounted(fetchUserData)
         </div>
 
         <div class="user-info">
-          <img :src="user.avatar || 'https://via.placeholder.com/150'" alt="Profilový obrázek" class="avatar" />
           <div class="details">
             <p><strong>👤 Jméno:</strong> {{ user.firstName }} {{ user.lastName }}</p>
-            <p v-if="user.email"><strong>📧 Email:</strong> {{ user.email }}</p>
           </div>
         </div>
       </div>

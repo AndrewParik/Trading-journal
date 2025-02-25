@@ -9,45 +9,33 @@ namespace api_part_project.Controllers
 {
     [Route("api/trader")]
     [ApiController]
-    [EnableCors("AllowAll")]
     public class TraderController : Controller
     {
         private readonly AppDbContext _context;
 
-        public TraderController(AppDbContext context)
+        public TraderController()
         {
-            _context = context;
+            _context = new AppDbContext();
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllTraders()
         {
-            var traders = await _context.Traders.ToListAsync();
-            foreach (Trader t in traders)
-            {
-                t.Trades = await _context.Trades.Where(te => te.IdTrader ==  t.Id).ToListAsync();
-            }
-            return Ok(_context.Traders);
+            var traders = await _context.Traders.Include(t => t.Trades).ToListAsync();
+            return Ok(traders);
         }
 
-        [HttpGet("/trades")]
-        public async Task<IActionResult> GetHisTrades([FromBody] int id)
-        {
-            var tr = await _context.Traders.FirstOrDefaultAsync(t => t.Id == id);
-            tr!.Trades = await _context.Trades.Where(t => t.IdTrader == id).ToListAsync();
-            return Ok(tr);
-        }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetTraderById(int id)
         {
-            var trader = await _context.Traders.FirstOrDefaultAsync(t => t.Id == id);
+            var trader = await _context.Traders.Include(t => t.Trades).FirstOrDefaultAsync(t => t.Id == id);
+
             if (trader == null)
             {
                 return NotFound(new { message = "Obchodník nenalezen." });
             } else
             {
-                trader.Trades = await _context.Trades.Where(t => t.IdTrader == id).ToListAsync();
                 return Ok(trader);
             }
         }

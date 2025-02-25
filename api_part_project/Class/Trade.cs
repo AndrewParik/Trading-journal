@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace api_part_project.Class
 {
     [Table("tbTrades")]
     public class Trade
     {
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("Id")]
@@ -16,16 +18,13 @@ namespace api_part_project.Class
         public int Worth { get; set; }
         [Column("DateCreated")]
         public DateTime DateCreated { get; set; }
-        [ForeignKey("Id")]
+        [Column("IdTrader")]
         public int IdTrader { get; set; }
+        [ForeignKey("IdTrader")]
+        [JsonIgnore]
+        public Trader Trader { get; set; }
 
-        public Trade(int id, string coinType, int worth, DateTime dateCreated)
-        {
-            Id = id;
-            CoinType = coinType;
-            Worth = worth;
-            DateCreated = dateCreated;
-        }
+        
     }
 }
 

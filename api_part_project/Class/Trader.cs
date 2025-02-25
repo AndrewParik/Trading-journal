@@ -18,13 +18,7 @@ namespace api_part_project.Class
         public List<Trade> Trades { get; set; }
         [Column("Password")]
         public string PassWord { get; set; }
-        public Trader(int id, string firstName, string lastName, string passWord)
-        {
-            Id = id;
-            FirstName = firstName;
-            LastName = lastName;
-            PassWord = passWord;
-        }
+        
     }
 }
 

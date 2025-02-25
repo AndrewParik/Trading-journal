@@ -11,9 +11,9 @@ namespace api_part_project.Controllers
     {
         private readonly AppDbContext _context;
 
-        public TradeController(AppDbContext appDbContext)
+        public TradeController()
         {
-            _context = appDbContext;
+            _context = new AppDbContext();
         }
 
         [HttpGet]
@@ -21,7 +21,7 @@ namespace api_part_project.Controllers
         {
             return Ok(_context.Trades);
         }
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetTradeById(int id)
         {
             var te = await _context.Trades.FirstOrDefaultAsync(t => t.Id == id);
@@ -31,7 +31,7 @@ namespace api_part_project.Controllers
             }
             return Ok(te);
         }
-        [HttpPost("/add")]
+        [HttpPost("add")]
         public async Task<IActionResult> AddTrade([FromBody] Trade te)
         {
             _context.Trades.Add(te);
@@ -39,7 +39,7 @@ namespace api_part_project.Controllers
             await _context.SaveChangesAsync();
             return Ok(tr!.Trades);
         }
-        [HttpDelete("/del/{id}")]
+        [HttpDelete("del/{id}")]
         public async Task<IActionResult> RemoveTrade(int id)
         {
             var te = await _context.Trades.FindAsync(id);

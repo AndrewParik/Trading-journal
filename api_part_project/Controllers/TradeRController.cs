@@ -73,13 +73,12 @@ namespace api_part_project.Controllers
             }
         }
         [HttpPut("edit")]
-        public async Task<IActionResult> EditTrader([FromBody] dynamic data)
+        public async Task<IActionResult> EditTrader([FromBody] Trader trader)
         {
-            int id = data.Id;
-            var tr = await _context.Traders.FirstOrDefaultAsync(t => t.Id == id);
-            if (data.FirstName != null) tr!.FirstName = data.FirstName;
-            if (data.LastName != null) tr!.LastName = data.LastName;
-            if (data.PassWord != null) tr!.PassWord = data.PassWord;
+            var tr = await _context.Traders.FirstOrDefaultAsync(t => t.Id == trader.Id);
+            if (trader.FirstName != null) tr!.FirstName = trader.FirstName;
+            if (trader.LastName != null) tr!.LastName = trader.LastName;
+            if (trader.PassWord != null) tr!.PassWord = trader.PassWord;
             await _context.SaveChangesAsync();
             return Ok(tr);
         }

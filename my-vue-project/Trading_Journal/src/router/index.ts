@@ -8,9 +8,9 @@ import Edit from '../views/Edit.vue'
 const routes = [
   { path: '/', component: MainPage },
   { path: '/lobby', component: Lobby },
-  { path: '/profile/id', component: Profile },
-  { path: '/trades/id', component: TradeDetail, props: true },
-  { path: '/edit/id', component: Edit}
+  { path: '/profile/0', component: Profile, props: true }, 
+  { path: '/trades/0', component: TradeDetail, props: true }, 
+  { path: '/edit/0', component: Edit, props: true } 
 ]
 
 const router = createRouter({

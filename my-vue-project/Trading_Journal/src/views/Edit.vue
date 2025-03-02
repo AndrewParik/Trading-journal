@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/axiosInstance'
 
@@ -8,21 +8,15 @@ const user1 = ref(JSON.parse(localStorage.getItem('user') || '{}'))
 const successMessage = ref('')
 const errorMessage = ref('')
 
+const userId = ref(0)  // 🔥 Pevně dané ID 0
+
 const originalProfil = ref({
   firstName: user1.value.firstName || '',
   lastName: user1.value.lastName || '',
   passWord: user1.value.passWord || ''
 })
 
-const profil = ref({ ...originalProfil.value })
-
-onMounted(() => {
-  if (!user1.value.userId) {
-    router.push('/')
-  } else {
-    profil.value = { ...originalProfil.value } 
-  }
-})
+const profil = ref(Object.assign({}, originalProfil.value))
 
 const isChanged = computed(() => {
   return (
@@ -34,28 +28,29 @@ const isChanged = computed(() => {
 
 const saveChanges = async () => {
   if (!isChanged.value) {
-    errorMessage.value = '❌ Nebyla provedena žádná změna.'
-    return
+    errorMessage.value = '❌ Nebyla provedena žádná změna.';
+    return;
   }
 
   try {
     const response = await api.put('/trader/edit', {
-      Id: user1.value.userId,
+      Id: userId.value, 
       FirstName: profil.value.firstName,
       LastName: profil.value.lastName,
       PassWord: profil.value.passWord
-    })
+    });
 
-    if (response.status === 200) {
+    if (response.status === 200 && response.data) {
       localStorage.setItem('user', JSON.stringify({ ...user1.value, ...profil.value }))
-      originalProfil.value = { ...profil.value }
+      originalProfil.value = Object.assign({}, profil.value)
+
       successMessage.value = '✅ Údaje úspěšně aktualizovány!'
       errorMessage.value = ''
     } else {
       errorMessage.value = '❌ Nepodařilo se aktualizovat údaje.'
     }
   } catch (error) {
-    console.error('Chyba při ukládání změn:', error)
+    console.error('❌ Chyba při ukládání změn:', error)
     errorMessage.value = '❌ Chyba při ukládání změn.'
   }
 }
@@ -84,7 +79,7 @@ const saveChanges = async () => {
       </div>
 
       <button @click="saveChanges" class="primary-btn">💾 Uložit</button>
-      <button @click="router.push('/lobby')" class="secondary-btn">🔙 Zpět</button>
+      <button @click="router.push('/profile/0')" class="secondary-btn">🔙 Zpět</button>
 
       <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>

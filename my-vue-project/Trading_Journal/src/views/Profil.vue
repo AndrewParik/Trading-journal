@@ -1,108 +1,71 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import api from '../api/axiosInstance'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-const route = useRoute()
 const router = useRouter()
-const userId = ref(route.params.id)
+const user = ref(JSON.parse(localStorage.getItem('user') || 'null'))
 
-const user = ref({
-  firstName: '',
-  lastName: '',
-  portfolioValue: 0
-})
-
-const trades = ref([])
-const errorMessage = ref('')
-
-
-const fetchUserData = async () => {
-  try {
-    const response = await api.get(`/trader/${userId.value}`)
-    user.value = response.data
-  } catch (error) {
-    console.error('❌ Chyba při načítání uživatele:', error)
-    errorMessage.value = '❌ Nepodařilo se načíst uživatelská data.'
-  }
-}
-
-const fetchUserTrades = async () => {
-  try {
-    const response = await api.get(`/trader/${userId.value}/trades`)
-    trades.value = response.data
-  } catch (error) {
-    console.error('❌ Chyba při načítání obchodů:', error)
-    errorMessage.value = '❌ Nepodařilo se načíst obchody.'
-  }
-}
-
-onMounted(async () => {
-  await fetchUserData()
-  await fetchUserTrades()
-})
+// Pokud nejsou v localStorage data, zobrazí se chybová hláška
+const errorMessage = ref(user.value ? '' : '❌ Nepodařilo se načíst uživatelská data.')
 </script>
 
 <template>
-  <div class="profile-container">
-    <div class="profile-banner">
-      <div class="overlay"></div>
-      <div class="profile-header">
-        <h1 v-if="user.firstName">{{ user.firstName }} {{ user.lastName }}</h1>
-        <h1 v-else>⏳ Načítání...</h1>
-      </div>
-    </div>
+  <div class="background-container">
+    <div class="overlay"></div>
+    <div class="profile-box">
+      <nav class="navbar">
+        <router-link to="/">🏠 Lobby</router-link>
+        <router-link to="/trades/0">📈 Obchody</router-link>
+        <router-link to="/edit/0">✏️ Upravit profil</router-link>
+      </nav>
 
-    <div class="profile-content">
-      <div class="info-card" v-if="user.firstName">
-        <h2>📊 Informace o uživateli</h2>
-        <p><strong>👤 Jméno:</strong> {{ user.firstName }} {{ user.lastName }}</p>
-        <p><strong>💰 Stav portfolia:</strong> {{ user.portfolioValue.toLocaleString() }} Kč</p>
-      </div>
+      <h1 class="profile-title">👤 Profil uživatele</h1>
 
-      <div class="trades-card" v-if="trades.length">
-        <h2>📈 Moje obchody</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Coin</th>
-              <th>Hodnota</th>
-              <th>Datum</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="trade in trades" :key="trade.id">
-              <td>{{ trade.id }}</td>
-              <td>{{ trade.coinType }}</td>
-              <td>{{ trade.worth.toLocaleString() }} Kč</td>
-              <td>{{ new Date(trade.dateCreated).toLocaleDateString() }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div class="profile-content" v-if="user">
+        <div class="info-card">
+          <h2>📊 Informace o uživateli</h2>
+          <p><strong>👤 Jméno:</strong> {{ user.firstName || 'Načítání...' }} {{ user.lastName || '' }}</p>
+          <p><strong>💰 Portfolio:</strong> {{ user.portfolioValue ? user.portfolioValue.toLocaleString() : 'Načítání...' }} Kč</p>
+        </div>
 
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+        <div class="trades-card" v-if="user.trades.length > 0">
+          <h2>📈 Moje obchody</h2>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Coin</th>
+                  <th>Hodnota</th>
+                  <th>Datum</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="trade in user.trades" :key="trade.id">
+                  <td>{{ trade.id }}</td>
+                  <td>{{ trade.coinType }}</td>
+                  <td>{{ trade.worth.toLocaleString() }} Kč</td>
+                  <td>{{ new Date(trade.dateCreated).toLocaleDateString() }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.profile-container {
-  background: #121212;
-  color: white;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: 'Arial', sans-serif;
-}
-
-.profile-banner {
+.background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 250px;
-  background: url('https://source.unsplash.com/1600x500/?technology,finance') no-repeat center/cover;
-  position: relative;
+  height: 100vh;
+  background: url('https://source.unsplash.com/1600x900/?business,finance,technology') no-repeat center center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -110,46 +73,84 @@ onMounted(async () => {
 
 .overlay {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
 }
 
-.profile-header {
+.profile-box {
   position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  width: 80%;
+  max-width: 800px;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.navbar {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  justify-content: space-around;
+  background: #3498db;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.navbar a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.profile-title {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #333;
 }
 
 .profile-content {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: end;
   gap: 20px;
-  margin-top: -40px;
+  margin-top: -10px;
   width: 90%;
   max-width: 1000px;
 }
 
 .info-card, .trades-card {
-  background: #1e1e1e;
+  background: #f4f4f4;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 600px;
+  text-align: left;
 }
 
-h2 {
-  margin-bottom: 10px;
+.table-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-  background: #2a2a2a;
+  background: white;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -161,11 +162,12 @@ th, td {
 }
 
 th {
-  background: #333;
+  background: #3498db;
+  color: white;
 }
 
 td {
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid #ddd;
 }
 
 .error {
@@ -173,8 +175,14 @@ td {
   margin-top: 10px;
 }
 
-table tr:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transition: 0.3s;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

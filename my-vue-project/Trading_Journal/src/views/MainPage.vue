@@ -1,127 +1,253 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/axiosInstance'
 
-const firstName = ref('')
-const lastName = ref('')
-const pass_word = ref('')
-const errorMessage = ref('')
 const router = useRouter()
+const userId = ref(0) 
 
-const handleLogin = async () => {
-  if (!firstName.value || !lastName.value || !pass_word.value) {
-    errorMessage.value = '❌ Prosím, vyplňte všechna pole.';
-    return;
-  }
+interface User {
+  id: number
+  firstName: string
+  lastName: string
+  portfolioValue: number
+  trades: Trade[]
+}
 
-  const user_name = `${firstName.value.trim()} ${lastName.value.trim()}`;
+interface Trade {
+  id: number
+  coinType: string
+  worth: number
+  dateCreated: string
+  idTrader: number
+}
 
+const user = ref<User | null>(null)
+const trades = ref<Trade[]>([])
+const errorMessage = ref<string>('')
+
+const fetchUserData = async () => {
   try {
-    const response = await api.post('/trader/login', {
-      UserName: user_name,
-      PassWord: pass_word.value
-    });
+    console.log("🧹 Mazání localStorage...");
+    localStorage.removeItem('user'); // Smaže data při startu aplikace
 
-    if (response.data) {
-      console.log('✅ Přihlášení úspěšné:', response.data);
+    console.log(`📤 Odesílám požadavek na API: /api/trader/${userId.value}`);
+    const response = await api.get(`/trader/${userId.value}`);
 
-      localStorage.setItem('user', JSON.stringify(response.data));
+    console.log("✅ API odpovědělo:", response.data);
 
-      router.push(`/lobby/${response.data.userId}`);
-    } else {
-      errorMessage.value = '❌ Neplatné přihlašovací údaje.';
-    }
+    user.value = response.data;
+    trades.value = response.data.trades || [];
+
+    localStorage.setItem('user', JSON.stringify(response.data)); // Uloží nová data
+    console.log("💾 LocalStorage aktualizován!");
+
   } catch (error) {
-    errorMessage.value = '❌ Chyba při přihlášení.';
+    console.error('❌ Chyba při načítání uživatelských dat:', error);
+    errorMessage.value = '❌ Nepodařilo se načíst uživatelská data.';
   }
-};
+}
 
+onMounted(fetchUserData);
 
 </script>
 
 <template>
   <div class="background-container">
     <div class="overlay"></div>
-    <div class="login-box">
-      <h1>👤 Přihlášení</h1>
-      <p class="subtitle">Vítejte zpět! Přihlaste se ke svému účtu.</p>
+    <div class="lobby">
+      <nav class="navbar">
+        <router-link to="/">🏠 Lobby</router-link>
+        <router-link to="/profile/0">👤 Profil</router-link>
+        <router-link to="/trades/0">📈 Obchody</router-link>
+        <router-link to="/edit/0">✏️ Upravit</router-link>
+      </nav>
 
-      <div class="form-group">
-        <label for="firstName">Jméno</label>
-        <input type="text" id="firstName" v-model="firstName" placeholder="Zadejte jméno" />
+      <h1>📊 Přehled portfolia</h1>
+
+      <div v-if="user">
+        <div class="portfolio">
+          <p>💰 Aktuální hodnota portfolia:</p>
+          <h2>{{ user?.portfolioValue ? user.portfolioValue.toLocaleString() : 'Načítání...' }} Kč</h2>
+        </div>
+
+        <div class="user-info">
+          <div class="details">
+            <p><strong>👤 Jméno:</strong> {{ user?.firstName || 'Načítání...' }} {{ user?.lastName || '' }}</p>
+          </div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="lastName">Příjmení</label>
-        <input type="text" id="lastName" v-model="lastName" placeholder="Zadejte příjmení" />
+      <div class="trades" v-if="trades.length > 0">
+        <h3>📈 Moje obchody</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Coin</th>
+              <th>Hodnota</th>
+              <th>Datum</th>
+              <th>Akce</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="trade in trades" :key="trade.id">
+              <td>{{ trade.id }}</td>
+              <td>{{ trade.coinType }}</td>
+              <td>{{ trade.worth.toLocaleString() }} Kč</td>
+              <td>{{ new Date(trade.dateCreated).toLocaleDateString() }}</td>
+              <td>
+                <router-link :to="`/trade/${trade.id}`" class="detail-button">📄 Detail</router-link>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <div class="form-group">
-        <label for="password">Heslo</label>
-        <input type="password" id="password" v-model="pass_word" placeholder="Zadejte heslo" />
-      </div>
-
-      <button @click="handleLogin">🔑 Přihlásit se</button>
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </div>
   </div>
 </template>
 
+
+
+
 <style scoped>
 .background-container {
   position: fixed;
-  background-color: black;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
+  background: url('https://source.unsplash.com/1600x900/?business,finance,technology') no-repeat center center/cover;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.login-box {
-  background: darkgray;
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.lobby {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
   padding: 30px;
   border-radius: 12px;
   text-align: center;
-  width: 350px;
-  box-shadow: 0px 4px 10px rgba(134, 133, 133, 0.2);
+  width: 80%;
+  max-width: 800px;
+  animation: fadeIn 0.6s ease-in-out;
 }
 
-h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  background: #3498db;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
 }
 
-.form-group {
-  margin-bottom: 15px;
-}
-
-input {
-  width: 92.7%;
-  padding: 12px;
-  background-color: black;
-  border: 1px solid black;
+.navbar a {
+  text-decoration: none;
   color: white;
-  border-radius: 8px;
-  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: 0.3s;
 }
 
-button {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
+.navbar a:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.portfolio {
+  font-size: 22px;
   font-weight: bold;
+  background: #f4f4f4;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 36px;
+  color: #27ae60;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.details {
+  text-align: left;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background: #f4f4f4;
+}
+
+.detail-button {
+  text-decoration: none;
   background: #3498db;
   color: white;
-  border: none;
-  border-radius: 8px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: 0.3s;
 }
 
-.error-message {
+.detail-button:hover {
+  background: #2980b9;
+}
+
+.error {
   color: red;
-  font-size: 14px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

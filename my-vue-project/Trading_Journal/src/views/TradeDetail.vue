@@ -1,75 +1,100 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import api from '../api/axiosInstance'
 
-const route = useRoute()
 const router = useRouter()
-const userId = route.params.id
+const user = ref(JSON.parse(localStorage.getItem('user') || 'null'))
+const errorMessage = ref(user.value ? '' : '❌ Nepodařilo se načíst uživatelská data.')
+const tradeIdToDelete = ref<number | null>(null)
 
-const user = ref(JSON.parse(localStorage.getItem('user') || '{}'));
-
-interface Trade {
-  id: number
-  coinType: string
-  worth: number
-  dateCreated: string
-  idTrader: number
-}
-
-const trade = ref<Trade | null>(null)
-const trades = ref<Trade[]>([]) 
-const errorMessage = ref<string>('')
 
 const newTrade = ref({
   coinType: '',
   worth: 0,
   dateCreated: new Date().toISOString(),
-  idTrader: user.value.userId
-})
+  idTrader: user.value?.id || 0
+});
 
-const fetchTrades = async () => {
+const updateLocalStorage = async () => {
   try {
-    const response = await api.get(`/trader/${userId}`)
-    trades.value = response.data.trades || []
+    console.log(`📤 Odesílám požadavek na API: /trader/0`);
+    const response = await api.get(`/trader/0`);
+    
+    console.log("✅ API odpovědělo:", response.data);
+    
+    localStorage.removeItem('user');
+    localStorage.setItem('user', JSON.stringify(response.data));
+    
+    user.value = response.data;
+
+
+    alert('✅ Data úspěšně aktualizována!');
   } catch (error) {
-    console.error('Chyba při načítání obchodů:', error)
-    errorMessage.value = '❌ Nepodařilo se načíst obchody.'
+    console.error('❌ Chyba při aktualizaci dat:', error);
+    errorMessage.value = '❌ Nepodařilo se aktualizovat data.';
   }
-}
+};
 
 const addTrade = async () => {
   if (!newTrade.value.coinType || newTrade.value.worth <= 0) {
-    errorMessage.value = '❌ Vyplňte všechny údaje správně.'
-    return
+    errorMessage.value = '❌ Vyplňte všechny údaje správně.';
+    return;
   }
 
   try {
-    const response = await api.post('/trade/add', newTrade.value)
+    console.log("📤 Odesílám požadavek na API:", newTrade.value);
+    
+    const response = await api.post('/trade/add', {
+      coinType: newTrade.value.coinType,
+      worth: newTrade.value.worth,
+      dateCreated: newTrade.value.dateCreated,
+      idTrader: newTrade.value.idTrader
+    });
 
-    trades.value = response.data 
-    newTrade.value = { coinType: '', worth: 0, dateCreated: new Date().toISOString(), idTrader: user.value.userId }
-    errorMessage.value = ''
-    alert('✅ Obchod úspěšně přidán!')
+    console.log("✅ Obchod přidán:", response.data);
+
+    user.value.trades.push(response.data);
+    localStorage.setItem('user', JSON.stringify(user.value));
+
+    newTrade.value = { coinType: '', worth: 0, dateCreated: new Date().toISOString(), idTrader: user.value.id };
+
+    errorMessage.value = '';
+    alert('✅ Obchod úspěšně přidán!');
   } catch (error) {
-    errorMessage.value = '❌ Nepodařilo se přidat obchod.'
+    console.error('❌ Chyba při přidávání obchodu:', error);
+    errorMessage.value = '❌ Nepodařilo se přidat obchod.';
   }
-}
+};
 
-const deleteTrade = async (tradeId: number) => {
-  if (!confirm('⚠️ Opravdu chcete odstranit tento obchod?')) return
+
+
+
+const deleteTrade = async () => {
+  if (!tradeIdToDelete.value) {
+    errorMessage.value = '❌ Zadejte ID obchodu k odstranění.';
+    return;
+  }
+
+  if (!confirm(`⚠️ Opravdu chcete odstranit obchod s ID ${tradeIdToDelete.value}?`)) return;
 
   try {
-    const response = await api.delete(`/trade/del/${tradeId}`)
-    trades.value = response.data 
-    alert('✅ Obchod úspěšně odstraněn!')
-  } catch (error) {
-    console.error('Chyba při mazání obchodu:', error)
-    errorMessage.value = '❌ Nepodařilo se odstranit obchod.'
-  }
-}
+    const response = await api.delete(`/trade/del/${tradeIdToDelete.value}`);
+    console.log("✅ Obchod odstraněn:", response.data);
 
-onMounted(fetchTrades)
+    localStorage.removeItem('user');
+    localStorage.setItem('user', JSON.stringify(response.data));
+
+    user.value.trades = response.data;
+    tradeIdToDelete.value = null;
+
+
+    alert('✅ Obchod úspěšně odstraněn!');
+  } catch (error) {
+    console.error('❌ Chyba při mazání obchodu:', error);
+    errorMessage.value = '❌ Nepodařilo se odstranit obchod.';
+  }
+};
 </script>
 
 <template>
@@ -77,10 +102,9 @@ onMounted(fetchTrades)
     <div class="overlay"></div>
     <div class="trade-detail">
       <nav class="navbar">
-        <router-link :to="`/lobby/${userId}`">🏠 Lobby</router-link>
-        <router-link :to="`/profile/${userId}`">👤 Profil</router-link>
-        <router-link :to="`/trades/${userId}`">📈 Obchody</router-link>
-        <router-link to="/">🚪 Odhlásit</router-link> 
+        <router-link to="/">🏠 Lobby</router-link>
+        <router-link to="/profile/0">👤 Profil</router-link>
+        <router-link to="/trades/0">📈 Obchody</router-link>
       </nav>
 
       <h1>📜 Moje obchody</h1>
@@ -96,10 +120,21 @@ onMounted(fetchTrades)
           <input type="number" id="worth" v-model="newTrade.worth" placeholder="Např. 10000" />
         </div>
         <button @click="addTrade" class="primary-btn">💾 Přidat obchod</button>
+        <button @click="updateLocalStorage" class="refresh-btn">🔄 Aktualizovat data</button>
       </div>
 
-      <div v-if="trades.length > 0">
-        <h2>📈 Seznam obchodů</h2>
+      <div class="delete-trade-form">
+        <h2>🗑️ Odstranit obchod</h2>
+        <div class="form-group">
+          <label for="tradeIdToDelete">ID obchodu</label>
+          <input type="number" id="tradeIdToDelete" v-model="tradeIdToDelete" placeholder="Zadejte ID obchodu" />
+        </div>
+        <button @click="deleteTrade" class="delete-btn">🗑️ Smazat obchod</button>
+        <button @click="updateLocalStorage" class="refresh-btn">🔄 Aktualizovat data</button>
+      </div>
+
+      <div class="trades" v-if="user?.trades?.length > 0">
+        <h3>📈 Seznam obchodů</h3>
         <table>
           <thead>
             <tr>
@@ -107,18 +142,14 @@ onMounted(fetchTrades)
               <th>Coin</th>
               <th>Hodnota</th>
               <th>Datum</th>
-              <th>Akce</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="trade in trades" :key="trade.id">
+            <tr v-for="trade in user.trades" :key="trade.id">
               <td>{{ trade.id }}</td>
               <td>{{ trade.coinType }}</td>
               <td>{{ trade.worth.toLocaleString() }} Kč</td>
               <td>{{ new Date(trade.dateCreated).toLocaleDateString() }}</td>
-              <td>
-                <button class="delete" @click="deleteTrade(trade.id)">🗑️ Smazat</button>
-              </td>
             </tr>
           </tbody>
         </table>
@@ -128,7 +159,6 @@ onMounted(fetchTrades)
     </div>
   </div>
 </template>
-
 <style scoped>
 .background-container {
   position: fixed;
@@ -140,6 +170,20 @@ onMounted(fetchTrades)
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.refresh-btn {
+  background: #3498db;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom: 20px;
+}
+
+.refresh-btn:hover {
+  background: #2980b9;
 }
 
 .overlay {
@@ -162,6 +206,19 @@ onMounted(fetchTrades)
   max-width: 800px;
 }
 
+.trade-detail {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  width: 80%;
+  max-width: 800px;
+  animation: fadeIn-7fc90d69 0.6sease-in-out;
+}
+
+
+
 .navbar {
   display: flex;
   justify-content: space-around;
@@ -179,7 +236,7 @@ onMounted(fetchTrades)
   border-radius: 5px;
 }
 
-.add-trade-form {
+.add-trade-form, .delete-trade-form {
   background: #f4f4f4;
   padding: 20px;
   border-radius: 10px;
@@ -210,15 +267,15 @@ input {
   background: #219150;
 }
 
-.delete {
+.delete-btn {
   background: #e74c3c;
   color: white;
-  padding: 5px 10px;
+  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.delete:hover {
+.delete-btn:hover {
   background: #c0392b;
 }
 

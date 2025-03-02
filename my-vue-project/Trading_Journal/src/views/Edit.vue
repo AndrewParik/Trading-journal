@@ -4,16 +4,16 @@ import { useRouter } from 'vue-router'
 import api from '../api/axiosInstance'
 
 const router = useRouter()
-const user1 = ref(JSON.parse(localStorage.getItem('user') || '{}'))
+const user = ref(JSON.parse(localStorage.getItem('user') || '{}'))
 const successMessage = ref('')
 const errorMessage = ref('')
 
 const userId = ref(0)
 
 const originalProfil = ref({
-  firstName: user1.value.firstName || '',
-  lastName: user1.value.lastName || '',
-  passWord: user1.value.passWord || ''
+  firstName: user.value.firstName || '',
+  lastName: user.value.lastName || '',
+  passWord: user.value.passWord || ''
 })
 
 const profil = ref(Object.assign({}, originalProfil.value))
@@ -31,29 +31,36 @@ const saveChanges = async () => {
     errorMessage.value = '❌ Nebyla provedena žádná změna.';
     return;
   }
+  localStorage.removeItem('user'); 
 
   try {
-    const response = await api.put('/trader/edit', {
-      Id: userId.value, 
+    const response = await api.put('trader/edit', {
+      Id: userId.value,
       FirstName: profil.value.firstName,
       LastName: profil.value.lastName,
       PassWord: profil.value.passWord
     });
 
     if (response.status === 200 && response.data) {
-      localStorage.setItem('user', JSON.stringify({ ...user1.value, ...profil.value }))
-      originalProfil.value = Object.assign({}, profil.value)
+      console.log("✅ Odpověď ze serveru:", response.data);
 
-      successMessage.value = '✅ Údaje úspěšně aktualizovány!'
-      errorMessage.value = ''
+      localStorage.removeItem('user'); 
+      localStorage.setItem('user', JSON.stringify(response.data));
+
+      originalProfil.value = Object.assign({}, profil.value);
+      successMessage.value = '✅ Údaje úspěšně aktualizovány!';
+      errorMessage.value = '';
+      localStorage.setItem('user', JSON.stringify(response.data));
     } else {
-      errorMessage.value = '❌ Nepodařilo se aktualizovat údaje.'
+      errorMessage.value = '❌ Nepodařilo se aktualizovat údaje.';
     }
   } catch (error) {
-    console.error('❌ Chyba při ukládání změn:', error)
-    errorMessage.value = '❌ Chyba při ukládání změn.'
+    console.error('❌ Chyba při ukládání změn:', error);
+    errorMessage.value = '❌ Chyba při ukládání změn.';
   }
-}
+};
+
+
 </script>
 
 <template>
@@ -79,7 +86,7 @@ const saveChanges = async () => {
       </div>
 
       <button @click="saveChanges" class="primary-btn">💾 Uložit</button>
-      <button @click="router.push('/profile/0')" class="secondary-btn">🔙 Zpět</button>
+      <button @click="router.push('/')" class="secondary-btn">🔙 Zpět</button>
 
       <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>

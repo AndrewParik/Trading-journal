@@ -73,14 +73,22 @@ namespace api_part_project.Controllers
             }
         }
         [HttpPut("edit")]
-        public async Task<IActionResult> EditTrader([FromBody] Trader trader)
+        public async Task<IActionResult> EditTrader([FromBody] TraderEditDto data)
         {
-            var tr = await _context.Traders.FirstOrDefaultAsync(t => t.Id == trader.Id);
-            if (trader.FirstName != null) tr!.FirstName = trader.FirstName;
-            if (trader.LastName != null) tr!.LastName = trader.LastName;
-            if (trader.PassWord != null) tr!.PassWord = trader.PassWord;
+            var tr = await _context.Traders.FirstOrDefaultAsync(t => t.Id == data.Id);
+            if (tr == null)
+            {
+                return NotFound(new { message = "Trader nenalezen." });
+            }
+
+            if (!string.IsNullOrEmpty(data.FirstName)) tr.FirstName = data.FirstName;
+            if (!string.IsNullOrEmpty(data.LastName)) tr.LastName = data.LastName;
+            if (!string.IsNullOrEmpty(data.PassWord)) tr.PassWord = data.PassWord;
+
             await _context.SaveChangesAsync();
             return Ok(tr);
         }
+
+
     }
 }

@@ -63,7 +63,7 @@ onMounted(fetchUserData);
         <router-link to="/edit/0">✏️ Upravit</router-link>
       </nav>
 
-      <h1>📊 Přehled portfolia</h1>
+      <h1>📊 Přehled portfolia</h1> 
 
       <div v-if="user">
         <div class="portfolio">

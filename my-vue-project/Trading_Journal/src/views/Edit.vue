@@ -8,7 +8,7 @@ const user1 = ref(JSON.parse(localStorage.getItem('user') || '{}'))
 const successMessage = ref('')
 const errorMessage = ref('')
 
-const userId = ref(0)  // 🔥 Pevně dané ID 0
+const userId = ref(0)
 
 const originalProfil = ref({
   firstName: user1.value.firstName || '',

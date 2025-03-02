@@ -29,7 +29,7 @@ const errorMessage = ref<string>('')
 const fetchUserData = async () => {
   try {
     console.log("🧹 Mazání localStorage...");
-    localStorage.removeItem('user'); // Smaže data při startu aplikace
+    localStorage.removeItem('user'); 
 
     console.log(`📤 Odesílám požadavek na API: /api/trader/${userId.value}`);
     const response = await api.get(`/trader/${userId.value}`);
@@ -39,7 +39,7 @@ const fetchUserData = async () => {
     user.value = response.data;
     trades.value = response.data.trades || [];
 
-    localStorage.setItem('user', JSON.stringify(response.data)); // Uloží nová data
+    localStorage.setItem('user', JSON.stringify(response.data));
     console.log("💾 LocalStorage aktualizován!");
 
   } catch (error) {
@@ -66,11 +66,6 @@ onMounted(fetchUserData);
       <h1>📊 Přehled portfolia</h1> 
 
       <div v-if="user">
-        <div class="portfolio">
-          <p>💰 Aktuální hodnota portfolia:</p>
-          <h2>{{ user?.portfolioValue ? user.portfolioValue.toLocaleString() : 'Načítání...' }} Kč</h2>
-        </div>
-
         <div class="user-info">
           <div class="details">
             <p><strong>👤 Jméno:</strong> {{ user?.firstName || 'Načítání...' }} {{ user?.lastName || '' }}</p>
@@ -87,7 +82,6 @@ onMounted(fetchUserData);
               <th>Coin</th>
               <th>Hodnota</th>
               <th>Datum</th>
-              <th>Akce</th>
             </tr>
           </thead>
           <tbody>
@@ -96,9 +90,6 @@ onMounted(fetchUserData);
               <td>{{ trade.coinType }}</td>
               <td>{{ trade.worth.toLocaleString() }} Kč</td>
               <td>{{ new Date(trade.dateCreated).toLocaleDateString() }}</td>
-              <td>
-                <router-link :to="`/trade/${trade.id}`" class="detail-button">📄 Detail</router-link>
-              </td>
             </tr>
           </tbody>
         </table>
@@ -220,7 +211,8 @@ th, td {
 }
 
 th {
-  background: #f4f4f4;
+  background: #01b7ff;
+  color: white;
 }
 
 .detail-button {

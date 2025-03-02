@@ -85,7 +85,7 @@ const deleteTrade = async () => {
     localStorage.removeItem('user');
     localStorage.setItem('user', JSON.stringify(response.data));
 
-    user.value.trades = response.data;
+    user.value.trades = response.data ?? [];
     tradeIdToDelete.value = null;
 
 
@@ -133,7 +133,8 @@ const deleteTrade = async () => {
         <button @click="updateLocalStorage" class="refresh-btn">🔄 Aktualizovat data</button>
       </div>
 
-      <div class="trades" v-if="user?.trades?.length > 0">
+      <div class="trades" v-if="user?.trades?.length && user.trades.length > 0">
+
         <h3>📈 Seznam obchodů</h3>
         <table>
           <thead>
@@ -184,6 +185,27 @@ const deleteTrade = async () => {
 
 .refresh-btn:hover {
   background: #2980b9;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background: #01b7ff;
+  color: white;
 }
 
 .overlay {

@@ -5,7 +5,6 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const user = ref(JSON.parse(localStorage.getItem('user') || 'null'))
 
-// Pokud nejsou v localStorage data, zobrazí se chybová hláška
 const errorMessage = ref(user.value ? '' : '❌ Nepodařilo se načíst uživatelská data.')
 </script>
 

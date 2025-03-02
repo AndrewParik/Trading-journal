@@ -112,9 +112,12 @@ const saveChanges = async () => {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
 }
 
 .content-box {
+  position: relative;
+  z-index: 10; 
   background: darkgray;
   padding: 30px;
   border-radius: 12px;
@@ -155,7 +158,7 @@ button {
 }
 
 .primary-btn {
-  background: #27ae60;
+  background: #00b7ff;
   color: white;
 }
 

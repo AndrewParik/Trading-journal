@@ -34,20 +34,29 @@ namespace api_part_project.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddTrade([FromBody] Trade te)
         {
+            int maxId = _context.Trades.Any() ? _context.Trades.Max(t => t.Id) + 1 : 1;
+            te.Id = maxId;
+
             _context.Trades.Add(te);
             var tr = await _context.Traders.FindAsync(te.IdTrader);
             await _context.SaveChangesAsync();
+
             return Ok(tr!.Trades);
         }
+
+
         [HttpDelete("del/{id}")]
         public async Task<IActionResult> RemoveTrade(int id)
         {
             var te = await _context.Trades.FindAsync(id);
-            var tr = await _context.Traders.FindAsync(te!.IdTrader);
-            _context.Trades.Remove(te!);
+            if (te == null) return NotFound();
+
+            _context.Trades.Remove(te);
             await _context.SaveChangesAsync();
-            return Ok(tr!.Trades);
+
+            return Ok(await _context.Trades.ToListAsync());
         }
+
     }
 }
 

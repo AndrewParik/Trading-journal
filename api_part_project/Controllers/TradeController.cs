@@ -19,7 +19,7 @@ namespace api_part_project.Controllers
         [HttpGet]
         public IActionResult GetAllTrades()
         {
-            return Ok(_context.Trades);
+            return Ok(_context.Trades.ToList());
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTradeById(int id)
@@ -40,13 +40,11 @@ namespace api_part_project.Controllers
 
             return Ok(tr!.Trades.ToList());
         }
-
-
         [HttpDelete("del/{id}")]
         public async Task<IActionResult> RemoveTrade(int id)
         {
             var te = await _context.Trades.FindAsync(id);
-            if (te == null) return NotFound();
+            if (te == null) return NotFound(new {msg = "Obchod neexistuje!"});
             var tr = await _context.Traders.FirstOrDefaultAsync(tr => tr.Id == te.IdTrader);
 
             _context.Trades.Remove(te);

@@ -34,14 +34,11 @@ namespace api_part_project.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddTrade([FromBody] Trade te)
         {
-            int maxId = _context.Trades.Any() ? _context.Trades.Max(t => t.Id) + 1 : 1;
-            te.Id = maxId;
-
             _context.Trades.Add(te);
             var tr = await _context.Traders.FindAsync(te.IdTrader);
             await _context.SaveChangesAsync();
 
-            return Ok(tr!.Trades);
+            return Ok(tr!.Trades.ToList());
         }
 
 
@@ -50,11 +47,12 @@ namespace api_part_project.Controllers
         {
             var te = await _context.Trades.FindAsync(id);
             if (te == null) return NotFound();
+            var tr = await _context.Traders.FirstOrDefaultAsync(tr => tr.Id == te.IdTrader);
 
             _context.Trades.Remove(te);
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.Trades.ToListAsync());
+            return Ok(tr!.Trades.ToList());
         }
 
     }

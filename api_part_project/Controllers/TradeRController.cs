@@ -49,14 +49,20 @@ namespace api_part_project.Controllers
             }
             else
             {
-                var tr = await _context.Traders.FirstOrDefaultAsync(t => t.FullName == login.UserName && t.PassWord == login.PassWord);
-                if (tr is null)
+                var tr = await _context.Traders.FirstOrDefaultAsync(t => t.FullName == login.UserName);
+                if (tr is not null)
                 {
-                    return BadRequest(new { msg = "Špatné přihlašovací údaje!" });
+                    if (tr.PassWord == login.PassWord)
+                    {
+                        return Ok(tr);
+                    }
+                    else
+                    {
+                        return BadRequest(new { msg = "Špatný heslo!" });
+                    }
                 } else
                 {
-                    tr!.Trades = await _context.Trades.Where(t => t.IdTrader == tr.Id).ToListAsync();
-                    return Ok(tr);
+                    return BadRequest(new { msg = "Uživatel neexistuje" });
                 }
             }
         }

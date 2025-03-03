@@ -16,27 +16,8 @@ const newTrade = ref({
   idTrader: user.value?.id || 0
 });
 
-const updateLocalStorage = async () => {
-  try {
-    console.log(`📤 Odesílám požadavek na API: /trader/0`);
-    const response = await api.get(`/trader/0`);
-    
-    console.log("✅ API odpovědělo:", response.data);
-    
-    localStorage.removeItem('user');
-    localStorage.setItem('user', JSON.stringify(response.data));
-    
-    user.value = response.data;
-
-
-    alert('✅ Data úspěšně aktualizována!');
-  } catch (error) {
-    console.error('❌ Chyba při aktualizaci dat:', error);
-    errorMessage.value = '❌ Nepodařilo se aktualizovat data.';
-  }
-};
-
-const addTrade = async () => {
+const addTradeAndUpdateStorage = async () => {
+  
   if (!newTrade.value.coinType || newTrade.value.worth <= 0) {
     errorMessage.value = '❌ Vyplňte všechny údaje správně.';
     return;
@@ -54,47 +35,51 @@ const addTrade = async () => {
 
     console.log("✅ Obchod přidán:", response.data);
 
-    user.value.trades.push(response.data);
-    localStorage.setItem('user', JSON.stringify(user.value));
+    console.log(`📤 Odesílám požadavek na API: /trader/0`);
+    const updatedResponse = await api.get(`/trader/0`);
+    
+    console.log("✅ API odpovědělo:", updatedResponse.data);
+    
+    localStorage.removeItem('user');
+    localStorage.setItem('user', JSON.stringify(updatedResponse.data));
+    
+    user.value = updatedResponse.data;
 
-    newTrade.value = { coinType: '', worth: 0, dateCreated: new Date().toISOString(), idTrader: user.value.id };
+    newTrade.value = { coinType: '', worth: 0, dateCreated: '', idTrader: user.value.id };
 
     errorMessage.value = '';
-    alert('✅ Obchod úspěšně přidán!');
+    alert('✅ Obchod úspěšně přidán a data byla aktualizována!');
   } catch (error) {
-    console.error('❌ Chyba při přidávání obchodu:', error);
-    errorMessage.value = '❌ Nepodařilo se přidat obchod.';
+    console.error('❌ Chyba:', error);
+    errorMessage.value = '❌ Nepodařilo se přidat obchod nebo aktualizovat data.';
   }
 };
 
-
-
-
-const deleteTrade = async () => {
-  if (!tradeIdToDelete.value) {
-    errorMessage.value = '❌ Zadejte ID obchodu k odstranění.';
-    return;
-  }
-
-  if (!confirm(`⚠️ Opravdu chcete odstranit obchod s ID ${tradeIdToDelete.value}?`)) return;
+const deleteTradeById = async (id: number) => {
+  if (!confirm(`⚠️ Opravdu chcete odstranit obchod s ID ${id}?`)) return;
 
   try {
-    const response = await api.delete(`/trade/del/${tradeIdToDelete.value}`);
-    console.log("✅ Obchod odstraněn:", response.data);
+    console.log(`📤 Odesílám požadavek na API: /trade/del/${id}`);
+    await api.delete(`/trade/del/${id}`);
+    console.log("✅ Obchod odstraněn.");
+
+    console.log(`📤 Odesílám požadavek na API: /trader/0`);
+    const updatedResponse = await api.get(`/trader/0`);
+
+    console.log("✅ API odpovědělo:", updatedResponse.data);
 
     localStorage.removeItem('user');
-    localStorage.setItem('user', JSON.stringify(response.data));
+    localStorage.setItem('user', JSON.stringify(updatedResponse.data));
 
-    user.value.trades = response.data ?? [];
-    tradeIdToDelete.value = null;
-
-
-    alert('✅ Obchod úspěšně odstraněn!');
+    user.value = updatedResponse.data;
+    alert('✅ Obchod úspěšně odstraněn a data byla aktualizována!');
   } catch (error) {
-    console.error('❌ Chyba při mazání obchodu:', error);
-    errorMessage.value = '❌ Nepodařilo se odstranit obchod.';
+    console.error('❌ Chyba při mazání obchodu nebo aktualizaci:', error);
+    errorMessage.value = '❌ Nepodařilo se odstranit obchod nebo aktualizovat data.';
   }
 };
+
+
 </script>
 
 <template>
@@ -106,7 +91,7 @@ const deleteTrade = async () => {
         <router-link to="/profile/0">👤 Profil</router-link>
         <router-link to="/trades/0">📈 Obchody</router-link>
       </nav>
-
+      
       <h1>📜 Moje obchody</h1>
 
       <div class="add-trade-form">
@@ -119,22 +104,14 @@ const deleteTrade = async () => {
           <label for="worth">Hodnota (Kč)</label>
           <input type="number" id="worth" v-model="newTrade.worth" placeholder="Např. 10000" />
         </div>
-        <button @click="addTrade" class="primary-btn">💾 Přidat obchod</button>
-        <button @click="updateLocalStorage" class="refresh-btn">🔄 Aktualizovat data</button>
-      </div>
-
-      <div class="delete-trade-form">
-        <h2>🗑️ Odstranit obchod</h2>
         <div class="form-group">
-          <label for="tradeIdToDelete">ID obchodu</label>
-          <input type="number" id="tradeIdToDelete" v-model="tradeIdToDelete" placeholder="Zadejte ID obchodu" />
+          <label for="dateCreated">Datum</label>
+          <input type="date" id="dateCreated" v-model="newTrade.dateCreated" />
         </div>
-        <button @click="deleteTrade" class="delete-btn">🗑️ Smazat obchod</button>
-        <button @click="updateLocalStorage" class="refresh-btn">🔄 Aktualizovat data</button>
+        <button @click="addTradeAndUpdateStorage" class="primary-btn">💾 Přidat obchod</button>
       </div>
 
       <div class="trades" v-if="user?.trades?.length && user.trades.length > 0">
-
         <h3>📈 Seznam obchodů</h3>
         <table>
           <thead>
@@ -143,6 +120,7 @@ const deleteTrade = async () => {
               <th>Coin</th>
               <th>Hodnota</th>
               <th>Datum</th>
+              <th>Akce</th>
             </tr>
           </thead>
           <tbody>
@@ -151,6 +129,9 @@ const deleteTrade = async () => {
               <td>{{ trade.coinType }}</td>
               <td>{{ trade.worth.toLocaleString() }} Kč</td>
               <td>{{ new Date(trade.dateCreated).toLocaleDateString() }}</td>
+              <td>
+                <button @click="deleteTradeById(trade.id)" class="small-delete-btn">🗑️</button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -160,17 +141,24 @@ const deleteTrade = async () => {
     </div>
   </div>
 </template>
+
 <style scoped>
+
+html, body {
+  height: 100%;
+  overflow-y: auto;
+}
+
 .background-container {
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative; 
   width: 100%;
-  height: 100vh;
+  min-height: 100vh; 
   background: url('https://source.unsplash.com/1600x900/?business,finance,technology') no-repeat center center/cover;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  overflow-y: auto; 
+  padding: 20px 0;
 }
 .refresh-btn {
   background: #3498db;
@@ -226,17 +214,8 @@ th {
   text-align: center;
   width: 80%;
   max-width: 800px;
-}
-
-.trade-detail {
-  position: relative;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  width: 80%;
-  max-width: 800px;
-  animation: fadeIn-7fc90d69 0.6sease-in-out;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  animation: fadeIn-7fc90d69 0.6s ease-in-out;
 }
 
 
@@ -248,6 +227,19 @@ th {
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 20px;
+}
+.small-delete-btn {
+  background: #e74c3c;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s;
+}
+
+.small-delete-btn:hover {
+  background: #c0392b;
 }
 
 .navbar a {

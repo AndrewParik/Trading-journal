@@ -34,9 +34,6 @@ namespace api_part_project.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddTrade([FromBody] Trade te)
         {
-            int maxId = _context.Trades.Any() ? _context.Trades.Max(t => t.Id) + 1 : 1;
-            te.Id = maxId;
-
             _context.Trades.Add(te);
             var tr = await _context.Traders.FindAsync(te.IdTrader);
             await _context.SaveChangesAsync();

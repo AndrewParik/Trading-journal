@@ -34,8 +34,7 @@ const saveChanges = async () => {
   localStorage.removeItem('user'); 
 
   try {
-    const response = await api.put('trader/edit', {
-      Id: userId.value,
+    const response = await api.put('trader/edit/0', {
       FirstName: profil.value.firstName,
       LastName: profil.value.lastName,
       PassWord: profil.value.passWord

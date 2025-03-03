@@ -58,16 +58,25 @@ const errorMessage = ref(user.value ? '' : '❌ Nepodařilo se načíst uživate
 </template>
 
 <style scoped>
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto; 
+}
+
 .background-container {
-  position: fixed;
+  position: absolute; 
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh; 
   background: url('https://source.unsplash.com/1600x900/?business,finance,technology') no-repeat center center/cover;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; 
+  padding: 20px;
 }
 
 .overlay {
@@ -80,15 +89,17 @@ const errorMessage = ref(user.value ? '' : '❌ Nepodařilo se načíst uživate
   backdrop-filter: blur(8px);
 }
 
+
 .profile-box {
   position: relative;
   background: rgba(255, 255, 255, 0.95);
   padding: 30px;
   border-radius: 12px;
   text-align: center;
-  width: 80%;
+  width: 90%;
   max-width: 800px;
-  animation: fadeIn 0.6s ease-in-out;
+  min-height: 500px;
+  overflow: auto; 
 }
 
 .navbar {
@@ -141,8 +152,8 @@ const errorMessage = ref(user.value ? '' : '❌ Nepodařilo se načíst uživate
 
 .table-container {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  max-height: 400px; 
+  overflow: auto; 
 }
 
 table {

@@ -49,14 +49,20 @@ namespace api_part_project.Controllers
             }
             else
             {
-                var tr = await _context.Traders.FirstOrDefaultAsync(t => t.FullName == login.UserName && t.PassWord == login.PassWord);
-                if (tr is null)
+                var tr = await _context.Traders.FirstOrDefaultAsync(t => t.FullName == login.UserName);
+                if (tr is not null)
                 {
-                    return BadRequest(new { msg = "Špatné přihlašovací údaje!" });
+                    if (tr.PassWord == login.PassWord)
+                    {
+                        return Ok(tr);
+                    }
+                    else
+                    {
+                        return BadRequest(new { msg = "Špatný heslo!" });
+                    }
                 } else
                 {
-                    tr!.Trades = await _context.Trades.Where(t => t.IdTrader == tr.Id).ToListAsync();
-                    return Ok(tr);
+                    return BadRequest(new { msg = "Uživatel neexistuje" });
                 }
             }
         }
@@ -72,10 +78,10 @@ namespace api_part_project.Controllers
                 return CreatedAtAction(nameof(GetTraderById), new { id = trader.Id } ,trader);
             }
         }
-        [HttpPut("edit")]
-        public async Task<IActionResult> EditTrader([FromBody] TraderEditDto data)
+        [HttpPut("edit/{id}")]
+        public async Task<IActionResult> EditTrader([FromBody] TraderEditDto data, int id)
         {
-            var tr = await _context.Traders.FirstOrDefaultAsync(t => t.Id == data.Id);
+            var tr = await _context.Traders.FirstOrDefaultAsync(t => t.Id == id);
             if (tr == null)
             {
                 return NotFound(new { message = "Trader nenalezen." });

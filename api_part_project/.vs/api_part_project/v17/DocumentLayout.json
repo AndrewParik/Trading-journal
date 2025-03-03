@@ -1,10 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\",
+  "WorkspaceRootPath": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\tom\\onedrive\\plocha\\trading-journal\\api_part_project\\controllers\\tradecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\controllers\\tradecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:controllers\\tradecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\controllers\\tradercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:controllers\\tradercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|c:\\users\\zemantomas\\desktop\\trading-journal\\api_part_project\\class\\tradeeditdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F6FE878-5368-4198-8D9C-07F2A821B667}|api_part_project.csproj|solutionrelative:class\\tradeeditdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,17 +22,51 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TradeEditDto.cs",
+              "DocumentMoniker": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\Class\\TradeEditDto.cs",
+              "RelativeDocumentMoniker": "Class\\TradeEditDto.cs",
+              "ToolTip": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\Class\\TradeEditDto.cs",
+              "RelativeToolTip": "Class\\TradeEditDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-03T08:25:42.961Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TradeRController.cs",
+              "DocumentMoniker": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\Controllers\\TradeRController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TradeRController.cs",
+              "ToolTip": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\Controllers\\TradeRController.cs",
+              "RelativeToolTip": "Controllers\\TradeRController.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAcwFMAAABRAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-03T08:21:27.203Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "TradeController.cs",
-              "DocumentMoniker": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\Controllers\\TradeController.cs",
+              "DocumentMoniker": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\Controllers\\TradeController.cs",
               "RelativeDocumentMoniker": "Controllers\\TradeController.cs",
-              "ToolTip": "C:\\Users\\Tom\\OneDrive\\Plocha\\Trading-journal\\api_part_project\\Controllers\\TradeController.cs",
+              "ToolTip": "C:\\Users\\zemantomas\\Desktop\\Trading-journal\\api_part_project\\Controllers\\TradeController.cs",
               "RelativeToolTip": "Controllers\\TradeController.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAgwBUAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAAAowD8AAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-24T18:34:29.439Z",
               "EditorCaption": ""

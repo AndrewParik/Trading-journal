@@ -78,10 +78,10 @@ namespace api_part_project.Controllers
                 return CreatedAtAction(nameof(GetTraderById), new { id = trader.Id } ,trader);
             }
         }
-        [HttpPut("edit")]
-        public async Task<IActionResult> EditTrader([FromBody] TraderEditDto data)
+        [HttpPut("edit/{id}")]
+        public async Task<IActionResult> EditTrader([FromBody] TraderEditDto data, int id)
         {
-            var tr = await _context.Traders.FirstOrDefaultAsync(t => t.Id == data.Id);
+            var tr = await _context.Traders.FirstOrDefaultAsync(t => t.Id == id);
             if (tr == null)
             {
                 return NotFound(new { message = "Trader nenalezen." });

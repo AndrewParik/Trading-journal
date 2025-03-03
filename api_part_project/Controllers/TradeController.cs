@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace api_part_project.Controllers
 {
@@ -52,7 +53,16 @@ namespace api_part_project.Controllers
 
             return Ok(tr!.Trades.ToList());
         }
-
+        [HttpPut("edit/{id}")]
+        public async Task<IActionResult> EditTrade([FromBody] TradeEditDto dto, int id)
+        {
+            var te = await _context.Trades.FirstOrDefaultAsync(t => t.Id == id);
+            if (te == null) return NotFound(new { m = "Obchod neexistuje!" });
+            var tr = await _context.Traders.FirstOrDefaultAsync(tr => tr.Id == te!.IdTrader);
+            if(string.IsNullOrWhiteSpace(dto.CoinType)) te!.CoinType = dto.CoinType;
+            dto.DateCreated = te!.DateCreated; dto.Worth = te!.Worth;
+            await _context.SaveChangesAsync(); return Ok(te);
+        }
     }
 }
 

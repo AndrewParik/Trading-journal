@@ -58,11 +58,19 @@ namespace api_part_project.Controllers
         {
             var te = await _context.Trades.FirstOrDefaultAsync(t => t.Id == id);
             if (te == null) return NotFound(new { m = "Obchod neexistuje!" });
-            var tr = await _context.Traders.FirstOrDefaultAsync(tr => tr.Id == te!.IdTrader);
-            if(string.IsNullOrWhiteSpace(dto.CoinType)) te!.CoinType = dto.CoinType;
-            dto.DateCreated = te!.DateCreated; dto.Worth = te!.Worth;
-            await _context.SaveChangesAsync(); return Ok(te);
+
+            Console.WriteLine($"🛠️ EDIT: ID {id}, CoinType: {dto.CoinType}, Worth: {dto.Worth}, DateCreated: {dto.DateCreated}");
+
+            if (!string.IsNullOrWhiteSpace(dto.CoinType)) te.CoinType = dto.CoinType;
+            if (dto.Worth > 0) te.Worth = dto.Worth;
+            if (dto.DateCreated != default(DateTime)) te.DateCreated = dto.DateCreated;
+
+            await _context.SaveChangesAsync();
+            return Ok(te);
         }
+
+
+
     }
 }
 
